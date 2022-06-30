@@ -1,0 +1,3 @@
+# Crontab para chamar o task scheduler do Laravel
+* * * * * root cd /var/www/ && php artisan schedule:run >> /dev/null 2>&1
+
