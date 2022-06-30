@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -46,19 +47,7 @@ class HttpCommand extends Command
     {
         parent::__construct();
 
-        $stack = HandlerStack::create();
-        $stack->push(RateLimiterMiddleware::perMinute(50));
-
-        $this->access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvbnRyYXRvcy5jb21wcmFzbmV0Lmdvdi5ici9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTY1NjYwOTk0NiwiZXhwIjoxNjU2NjEzNTQ2LCJuYmYiOjE2NTY2MDk5NDYsImp0aSI6Inc0QkU4WDRlUFpJY2dWbzMiLCJzdWIiOjEzMzcsInBydiI6Ijc5MzY2MzU2Nzk1ODQ0NTM0MDgzNGFlY2NlZmZhNjM3MjMzODllZDcifQ.da0Fqfx7DYaXQoeiSZirjqHuxMPvMsvZzV37P7adOY0';
-
-        $this->client = new Client([
-            'verify' => false,
-            'handler' => $stack,
-            'headers' => [
-                'Authorization' => "Bearer " . $this->access_token ?? 'not_valid'
-            ],
-//            'timeout' => 2
-        ]);
+        $this->fillGuzzleClient();
     }
 
     /**
@@ -68,8 +57,10 @@ class HttpCommand extends Command
      */
     public function getData($extended_url, $full_url = false)
     {
-//        $this->getAccessToken('/auth/login');
-//        die();
+        if (! $this->accessTokenIsValid()) {
+            $this->updateAccessToken();
+            $this->fillGuzzleClient();
+        }
 
         $this->base_url = $full_url ? $extended_url : config('comprasnet.base_url') . $extended_url;
         $this->comment(date('[Y-m-d H:i:s]'));
@@ -92,7 +83,7 @@ class HttpCommand extends Command
             }
 //        } catch (GuzzleException $e) {
         } catch (ClientException $e) {
-            $this->error('Houve algum erro na request...');
+            $this->error('[getData] Erro ao buscar dados...');
 
             $this->error('getRequest:');
 //            $this->error(Psr7\str($e->getRequest()));
@@ -111,103 +102,23 @@ class HttpCommand extends Command
         }
     }
 
-    /**
-     * Gera token para o usuário do sistema
-     *
-     * @return void
-     */
-    public function getAccessToken($extended_url, $full_url = false) : void
+    private function accessTokenIsValid() : bool
     {
-        $login_url = $full_url ? $extended_url : config('comprasnet.base_url') . $extended_url;
-        $params = [
-            'cpf' => config('comprasnet.usuario_sistema'),
-            'passport' => config('comprasnet.senha_usuario')
-        ];
-        $this->comment('Gerando novo token [' . $login_url . ']');
-        $this->comment(date('[Y-m-d H:i:s]'));
+        $url = config('comprasnet.base_url') . '/auth/me';
 
         try {
-            $result = $this->client->post($login_url, [
-                'form_params' => [
-                    'cpf' => '922.096.531-34',
-                    'passport' => '4iZUk7DKS3EAENmgfTk8zJhBn'
-                ]
-            ]);
-
-            dd($result);
-        } catch (GuzzleException $e) {
-//        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-//        } catch (ClientException $e) {
-
-            dd($e);
-        }
-
-//        $htppCall = Http::withOptions(['verify' => false])->withHeaders([
-//            'Content-Type' => 'application/json',
-//            'verify' => false,
-//        ])->post($login_url, $params);
-////        $htppCall= Http::withHeaders([
-////            'Content-Type' => 'application/json',
-////
-////        ])->get("https://jsonplaceholder.typicode.com/todos",[]);
-////        dd($htppCall->status());
-////        dd($htppCall->object());
-////        dd($htppCall->json());
-////        dd($htppCall->clientError());
-////        dd($htppCall->serverError());
-//        dd($htppCall->body());
-
-//        die();
-
-        try {
-            $stack = HandlerStack::create();
-            $client = new Client([
-                'curl' => [CURLOPT_SSL_VERIFYPEER => false],
-//                'verify' => false,
-                'handler' => $stack,
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'multipart/form-data',
-                ],
-            ]);
-
-            try {
-                $response = $client->request('POST', $login_url, [
-                    'form_params' => [
-                        'cpf' => '922.096.531-34',
-                        'passport' => '4iZUk7DKS3EAENmgfTk8zJhBn'
-                    ]
-                ]);
-
-            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-                dd($e->getMessage());
-                dd(Psr7\Message::toString($e->getResponse()));
-                dd(Psr7\Message::toString($e->getResponse()->getBody()->getContents()));
+            $result = $this->client->request('GET', $url);
+            $response = json_decode($result->getBody(), true);
+            if ($response && is_array($response) && isset($response['id'])) {
+                return true;
             }
-
-            dd($response);
-            return;
-
-///            $result = $this->client->request();
-//            $result = $this->client->request('POST', $login_url, [
-//                'form_params' => [
-//                    'cpf' => config('comprasnet.usuario_sistema'),
-//                    'passport' => config('comprasnet.senha_usuario')
-//                ]
-//            ]);
-            $result = $this->client->post($login_url, [
-                'form_params' => [
-                    'cpf' => config('comprasnet.usuario_sistema'),
-                    'passport' => config('comprasnet.senha_usuario')
-                ]
-            ]);
-//            dd($result);
-        } catch (ClientException $e) {
-            $this->error('Houve erro ao buscar novo token...');
+        } catch (GuzzleException $e) {
+            $this->error('[accessTokenIsValid] Erro ao verificar token...');
             $this->error('getRequest:');
             $this->error(Psr7\Message::toString($e->getRequest()));
-            $this->error('getResponse:');
+
             if ($e->hasResponse()) {
+                $this->error('getResponse:');
                 $this->error(Psr7\Message::toString($e->getResponse()));
             }
             $this->error('fullError:');
@@ -215,6 +126,106 @@ class HttpCommand extends Command
             $this->line('----------------------------------------------------------------------');
         }
 
-        $this->access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvbnRyYXRvcy5jb21wcmFzbmV0Lmdvdi5ici9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTY1NjU5MjMzNSwiZXhwIjoxNjU2NTk1OTM1LCJuYmYiOjE2NTY1OTIzMzUsImp0aSI6IkhpUkFTMENKb2w4MXNpbWgiLCJzdWIiOjEzMzcsInBydiI6Ijc5MzY2MzU2Nzk1ODQ0NTM0MDgzNGFlY2NlZmZhNjM3MjMzODllZDcifQ.EFIdyDw3tIGdK_skoDkzMI-I9lh0JqffIP8uxlsX3Cg';
+        return false;
+    }
+
+    private function updateAccessToken() : void
+    {
+        $this->refreshAccessToken();
+
+        if (! $this->accessTokenIsValid()) {
+            $this->generateNewAccessToken();
+        }
+
+        if (! $this->accessTokenIsValid()) {
+            /**
+             * @TODO
+             * - enviar email ao adm
+             * - parar todas as execuções
+             */
+            die();
+        }
+    }
+
+    /**
+     * Gera token para o usuário do sistema
+     *
+     * @return void
+     */
+    private function refreshAccessToken() : void
+    {
+        $url = config('comprasnet.base_url') . '/auth/refresh';
+
+        $this->comment('Atualizando token [' . $url . ']');
+
+        try {
+            $result = $this->client->request('POST', $url);
+            $response = json_decode($result->getBody(), true);
+
+            if ($response) {
+                $this->access_token = $response['access_token'] ?? null;
+                $this->comment('Access Token:');
+                $this->comment($this->access_token);
+
+                // Comentar linha abaixo:
+                $this->comment('Access token:');
+                $this->comment($this->access_token);
+            }
+        } catch (GuzzleException $e) {
+            $this->error('[refreshAccessToken] Erro ao buscar dados...');
+            $this->error('getRequest:');
+            $this->error(Psr7\Message::toString($e->getRequest()));
+
+            if ($e->hasResponse()) {
+                $this->error('getResponse:');
+                $this->error(Psr7\Message::toString($e->getResponse()));
+            }
+            $this->error('fullError:');
+            $this->error($e);
+            $this->line('----------------------------------------------------------------------');
+        }
+    }
+
+    private function generateNewAccessToken() : void
+    {
+        dd('Gerar novo access token');
+    }
+
+    private function fillGuzzleClient(): void
+    {
+        $stack = HandlerStack::create();
+        $stack->push(RateLimiterMiddleware::perMinute(50));
+
+        $this->access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvbnRyYXRvcy5jb21wcmFzbmV0Lmdvdi5ici9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTY1NjYyMjM4NiwiZXhwIjoxNjU2NjI1OTg2LCJuYmYiOjE2NTY2MjIzODYsImp0aSI6IjNCT0ZjaDdZUVNZQ2VxR1QiLCJzdWIiOjEzMzcsInBydiI6Ijc5MzY2MzU2Nzk1ODQ0NTM0MDgzNGFlY2NlZmZhNjM3MjMzODllZDcifQ.W3sWZwR4xN1orFkKIqpD6e7fBH0wxDt9ykjAcIzkA68';
+
+        $this->client = new Client([
+            'verify' => false,
+            'handler' => $stack,
+            'headers' => [
+                'Authorization' => "Bearer " . $this->access_token
+            ],
+//            'timeout' => 2
+        ]);
     }
 }
+
+
+//protected function apiRestPostRequest($url, $json_params){
+//    $curl = curl_init();
+//    curl_setopt($curl, CURLOPT_URL, $url);
+//    curl_setopt($curl, CURLOPT_POSTFIELDS, $json_params);
+//    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+//        "Content-Type: application/json",
+//        "chave-api:".$this->ws_chave_api
+//    ));
+//    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+//    $response = curl_exec($curl);
+//    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+//    curl_close ($curl);
+//    if($httpcode==200)
+//        return $response;
+//    else {
+//        $response = "[".$httpcode . "] Erro ao informar os dados ao e-Aud (".$response.")";
+//        throw new Exception($response, $httpcode);
+//    }
+//}
