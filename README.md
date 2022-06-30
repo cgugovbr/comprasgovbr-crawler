@@ -76,7 +76,7 @@ Edite o arquivo de configuração '.env' com os seguintes dados:
 ```env
 DB_CONNECTION=sqlsrv
 DB_HOST=127.0.0.1
-DB_PORT=3306
+DB_PORT=1433
 DB_DATABASE=nome_database
 DB_USERNAME=usuario_banco_dados
 DB_PASSWORD=senha_usuario_banco_dados
