@@ -132,9 +132,11 @@ class HttpCommand extends Command
     private function updateAccessToken() : void
     {
         $this->refreshAccessToken();
+        $this->fillGuzzleClient();
 
         if (! $this->accessTokenIsValid()) {
             $this->generateNewAccessToken();
+            $this->fillGuzzleClient();
         }
 
         if (! $this->accessTokenIsValid()) {
@@ -143,6 +145,7 @@ class HttpCommand extends Command
              * - enviar email ao adm
              * - parar todas as execuções
              */
+            dd('erro em updateAccessToken...');
             die();
         }
     }
@@ -188,15 +191,43 @@ class HttpCommand extends Command
 
     private function generateNewAccessToken() : void
     {
-        dd('Gerar novo access token');
+        $this->comment('Gerando novo Access Token...');
+        $url = config('comprasnet.base_url') . '/auth/login';
+        $params = [
+            'cpf' => config('comprasnet.usuario_sistema'),
+            'password' => config('comprasnet.senha_usuario'),
+        ];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+//        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+//            "Content-Type: application/json",
+//        ]);
+
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close ($curl);
+
+        if ($httpcode == 200) {
+            $json_response = json_decode($response, true);
+            if (is_array($json_response) && isset($json_response['access_token'])) {
+                $this->access_token = $json_response['access_token'];
+                $this->info('Token gerado com sucesso!');
+                $this->info($this->access_token);
+            }
+        }
     }
 
     private function fillGuzzleClient(): void
     {
         $stack = HandlerStack::create();
         $stack->push(RateLimiterMiddleware::perMinute(50));
-
-        $this->access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NvbnRyYXRvcy5jb21wcmFzbmV0Lmdvdi5ici9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTY1NjYyMjM4NiwiZXhwIjoxNjU2NjI1OTg2LCJuYmYiOjE2NTY2MjIzODYsImp0aSI6IjNCT0ZjaDdZUVNZQ2VxR1QiLCJzdWIiOjEzMzcsInBydiI6Ijc5MzY2MzU2Nzk1ODQ0NTM0MDgzNGFlY2NlZmZhNjM3MjMzODllZDcifQ.W3sWZwR4xN1orFkKIqpD6e7fBH0wxDt9ykjAcIzkA68';
 
         $this->client = new Client([
             'verify' => false,
@@ -208,24 +239,3 @@ class HttpCommand extends Command
         ]);
     }
 }
-
-
-//protected function apiRestPostRequest($url, $json_params){
-//    $curl = curl_init();
-//    curl_setopt($curl, CURLOPT_URL, $url);
-//    curl_setopt($curl, CURLOPT_POSTFIELDS, $json_params);
-//    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-//        "Content-Type: application/json",
-//        "chave-api:".$this->ws_chave_api
-//    ));
-//    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//    $response = curl_exec($curl);
-//    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-//    curl_close ($curl);
-//    if($httpcode==200)
-//        return $response;
-//    else {
-//        $response = "[".$httpcode . "] Erro ao informar os dados ao e-Aud (".$response.")";
-//        throw new Exception($response, $httpcode);
-//    }
-//}

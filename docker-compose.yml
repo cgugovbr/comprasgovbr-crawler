@@ -32,10 +32,11 @@ services:
             ACCEPT_EULA: 'Y'
             SA_PASSWORD: '${DB_PASSWORD}'
             MSSQL_PID: 'Express'
+        # Create here database from the .env file, if it does not exist
 #        commands:
 #            - 'docker exec -it comprasnet-crawler-sqlsrv-1 /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P VeryStrongPass,4598 -q "CREATE DATABASE comprasnet_crawler"'
-#        volumes:
-#            - 'sail-mysql:/var/lib/mysql'
+        volumes:
+            - 'sail-sqlsrv:/var/opt/mssql'
         networks:
             - sail
 #        healthcheck:
@@ -52,6 +53,6 @@ services:
 networks:
     sail:
         driver: bridge
-#volumes:
-#    sail-sqlsrv:
-#        driver: local
+volumes:
+    sail-sqlsrv:
+        driver: local
