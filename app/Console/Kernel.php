@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
-use App\Mail\ErroImportacao;
 use Carbon\Carbon;
+use App\Mail\ErroImportacao;
+use App\Mail\DadosImportados;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,12 +29,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('comprasnet:contratos -e -c -i --inativos')
             ->cron('0 5 * * *')
             ->sendOutputTo($file_path)
-            // ->onSuccess(function () use ($data) {
-            //     Mail::send(new DadosImportados($data));
-            // })
+//            ->onSuccess(function () use ($data) {
+//                Mail::send(new DadosImportados($data));
+//            })
             ->onFailure(function () use ($data) {
-//                Mail::send(new ErroImportacao($data));
-                // @todo - make new mailable with symfony mailable
+                Mail::send(new ErroImportacao($data));
             });
     }
 
