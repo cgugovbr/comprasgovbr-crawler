@@ -213,13 +213,12 @@ class HttpCommand extends Command
         $response = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close ($curl);
-
         if ($httpcode == 200) {
             $json_response = json_decode($response, true);
             if (is_array($json_response) && isset($json_response['access_token'])) {
                 $this->access_token = $json_response['access_token'];
                 $this->info('Token gerado com sucesso!');
-                $this->info($this->access_token);
+//                $this->info($this->access_token);
             }
         }
     }
