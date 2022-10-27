@@ -7,8 +7,8 @@
 #
 FROM composer:2 as composer
 WORKDIR /app
-COPY composer.json composer.json
-COPY composer.lock composer.lock
+COPY ./../composer.json composer.json
+COPY ./../composer.lock composer.lock
 RUN composer --no-ansi install --no-ansi --prefer-dist --no-dev --no-scripts --no-interaction --ignore-platform-reqs --no-autoloader
 
 #
