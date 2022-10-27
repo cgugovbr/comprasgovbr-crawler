@@ -106,7 +106,14 @@ COPY ./docker/production/supervisord.conf /etc/supervisor/conf.d/supervisord.con
 COPY ./docker/production/php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
-RUN composer dump-autoload
+# Cria composer autoloader
+RUN composer --no-ansi dump-autoload --no-scripts --no-dev --no-interaction --optimize
+
+# Configura alias
+RUN echo "alias l='ls -la'" >> ~/.bash_profile \
+    && echo "alias l='ls -la'" >> ~/.bashrc
+RUN echo "alias a='php artisan'" >> ~/.bash_profile \
+    && echo "alias a='php artisan'" >> ~/.bashrc
 
 EXPOSE 8000
 
