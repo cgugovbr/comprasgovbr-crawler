@@ -7,8 +7,8 @@
 #
 FROM composer:2 as composer
 WORKDIR /app
-COPY ./../composer.json composer.json
-COPY ./../composer.lock composer.lock
+COPY ./composer.json composer.json
+COPY ./composer.lock composer.lock
 RUN composer --no-ansi install --no-ansi --prefer-dist --no-dev --no-scripts --no-interaction --ignore-platform-reqs --no-autoloader
 
 #
@@ -97,9 +97,9 @@ COPY --from=composer /app /var/www/html
 # Copia código da aplicação
 COPY . /var/www/html
 
-COPY start-container /usr/local/bin/start-container
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
+COPY ./docker/production/start-container /usr/local/bin/start-container
+COPY ./docker/production/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker/production/php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 8000
