@@ -24,14 +24,18 @@ ARG POSTGRES_VERSION=13
 
 WORKDIR /var/www/html
 
+ENV TZ=UTC
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Configurar o idioma do sistema (locales)
-RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
-    && sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen \
-    && locale-gen en_US.UTF-8 pt_BR.UTF-8
-ENV LANG pt_BR.UTF-8
-ENV LANGUAGE pt_BR:pt
-ENV LC_ALL pt_BR.UTF-8
-ENV TZ America/Sao_Paulo
+#RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+#    && sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen \
+#    && locale-gen en_US.UTF-8 pt_BR.UTF-8
+#ENV LANG pt_BR.UTF-8
+#ENV LANGUAGE pt_BR:pt
+#ENV LC_ALL pt_BR.UTF-8
+#ENV TZ America/Sao_Paulo
 
 RUN apt-get update \
     && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
