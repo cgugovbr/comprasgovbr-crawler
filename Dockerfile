@@ -106,6 +106,8 @@ COPY ./docker/production/supervisord.conf /etc/supervisor/conf.d/supervisord.con
 COPY ./docker/production/php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
+RUN composer dump-autoload
+
 EXPOSE 8000
 
 ENTRYPOINT ["start-container"]
