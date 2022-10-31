@@ -173,12 +173,12 @@ chown -R www-data:www-data /var/www/html/public/storage
 # su - www-data -c php-fpm
 
 # Configurar o cron com o Task Scheduler
-#date +'%Y-%m-%d %H:%M:%S' && echo "Configurando crontab"
-#cat ./docker/laravel_crontab >> /etc/crontab
+date +'%Y-%m-%d %H:%M:%S' && echo "Configurando crontab"
+cat ./docker/laravel_crontab >> /etc/crontab
 
-# Inicia serviço Cron
-#date +'%Y-%m-%d %H:%M:%S' && echo "Inicia o cron"
-#service cron start
+# Inicia Cron
+date +'%Y-%m-%d %H:%M:%S' && echo "Inicia o cron"
+service cron start
 
 # Finalização padrao do Laravel Sail
 if [ $# -gt 0 ]; then
