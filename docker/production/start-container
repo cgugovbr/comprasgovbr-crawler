@@ -143,8 +143,8 @@ done
 date +'%Y-%m-%d %H:%M:%S' && echo "Criando storage link"
 rm public/storage > /dev/null 2>&1
 php artisan storage:link
-chown -R www-data:www-data /var/www/storage/
-chown -R www-data:www-data /var/www/public/storage
+chown -R www-data:www-data /var/www/html/storage/
+chown -R www-data:www-data /var/www/html/public/storage
 
 # Cria/atualiza tabelas no banco de dados
 #date +'%Y-%m-%d %H:%M:%S' && echo "Migrando tabelas"
