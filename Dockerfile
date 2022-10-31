@@ -115,6 +115,13 @@ RUN echo "alias l='ls -la'" >> ~/.bash_profile \
 RUN echo "alias a='php artisan'" >> ~/.bash_profile \
     && echo "alias a='php artisan'" >> ~/.bashrc
 
+# Configuracao para dev
+RUN apt-get update \
+    && apt-get install -y vim \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 EXPOSE 8000
 
 ENTRYPOINT ["start-container"]
