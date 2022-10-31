@@ -142,6 +142,7 @@ done
 # Cria Sotrage link
 date +'%Y-%m-%d %H:%M:%S' && echo "Criando storage link"
 rm public/storage > /dev/null 2>&1
+chmod 775 -R /var/www/html/storage/
 php artisan storage:link
 chown -R www-data:www-data /var/www/html/storage/
 chown -R www-data:www-data /var/www/html/public/storage
