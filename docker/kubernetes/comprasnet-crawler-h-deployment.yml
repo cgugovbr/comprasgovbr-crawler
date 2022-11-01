@@ -223,3 +223,232 @@ items:
 kind: List
 metadata:
   resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "18"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"deployment.kubernetes.io/revision":"17","kubernetes.io/change-cause":"2022-10-31 17:13:18 / Deploy via Jenkins (RollingUpdate) / Atualizado para comprasnet-crawler-h:7.20221031171158","team":"CGSIS/PHP1"},"creationTimestamp":"2022-08-02T11:47:24Z","generation":41,"labels":{"app":"comprasnet-crawler-h"},"managedFields":[{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:team":{}},"f:labels":{".":{},"f:app":{}}},"f:spec":{"f:progressDeadlineSeconds":{},"f:replicas":{},"f:revisionHistoryLimit":{},"f:selector":{"f:matchLabels":{".":{},"f:app":{}}},"f:strategy":{"f:rollingUpdate":{".":{},"f:maxSurge":{},"f:maxUnavailable":{}},"f:type":{}},"f:template":{"f:metadata":{"f:annotations":{".":{},"f:team":{}},"f:labels":{".":{},"f:app":{}}},"f:spec":{"f:containers":{"k:{\"name\":\"comprasnet-crawler-h\"}":{".":{},"f:imagePullPolicy":{},"f:livenessProbe":{".":{},"f:failureThreshold":{},"f:httpGet":{".":{},"f:port":{},"f:scheme":{}},"f:periodSeconds":{},"f:successThreshold":{},"f:timeoutSeconds":{}},"f:name":{},"f:ports":{".":{},"k:{\"containerPort\":8080,\"protocol\":\"TCP\"}":{".":{},"f:containerPort":{},"f:name":{},"f:protocol":{}}},"f:readinessProbe":{".":{},"f:failureThreshold":{},"f:httpGet":{".":{},"f:port":{},"f:scheme":{}},"f:periodSeconds":{},"f:successThreshold":{},"f:timeoutSeconds":{}},"f:resources":{".":{},"f:limits":{".":{},"f:cpu":{},"f:memory":{}},"f:requests":{".":{},"f:cpu":{},"f:memory":{}}},"f:terminationMessagePath":{},"f:terminationMessagePolicy":{}}},"f:dnsPolicy":{},"f:imagePullSecrets":{".":{},"k:{\"name\":\"regcred\"}":{".":{},"f:name":{}}},"f:restartPolicy":{},"f:schedulerName":{},"f:securityContext":{},"f:terminationGracePeriodSeconds":{}}}}},"manager":"kubectl-client-side-apply","operation":"Update","time":"2022-08-02T11:47:24Z"},{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:spec":{"f:template":{"f:spec":{"f:containers":{"k:{\"name\":\"comprasnet-crawler-h\"}":{"f:env":{".":{},"k:{\"name\":\"app_debug\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"app_env\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"app_name\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"app_url\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_adm_emails\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_base_url\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_codigo_orgao\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_codigo_ug\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_senha_usuario\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_support_emails\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"comprasnet_usuario_sistema\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_connection\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_database\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_host\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_password\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_port\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"db_username\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_encryption\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_from_address\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_host\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_mailer\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_password\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_port\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}},"k:{\"name\":\"mail_username\"}":{".":{},"f:name":{},"f:valueFrom":{".":{},"f:secretKeyRef":{".":{},"f:key":{},"f:name":{}}}}},"f:livenessProbe":{"f:httpGet":{"f:path":{}},"f:initialDelaySeconds":{}},"f:readinessProbe":{"f:httpGet":{"f:path":{}},"f:initialDelaySeconds":{}}}}}}}},"manager":"kubectl-edit","operation":"Update","time":"2022-10-31T19:21:47Z"},{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{"f:kubectl.kubernetes.io/last-applied-configuration":{},"f:kubernetes.io/change-cause":{}}},"f:spec":{"f:template":{"f:spec":{"f:containers":{"k:{\"name\":\"comprasnet-crawler-h\"}":{"f:image":{}}}}}}},"manager":"kubectl","operation":"Update","time":"2022-10-31T20:13:17Z"},{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{"f:deployment.kubernetes.io/revision":{}}},"f:status":{"f:availableReplicas":{},"f:conditions":{".":{},"k:{\"type\":\"Available\"}":{".":{},"f:lastTransitionTime":{},"f:lastUpdateTime":{},"f:message":{},"f:reason":{},"f:status":{},"f:type":{}},"k:{\"type\":\"Progressing\"}":{".":{},"f:lastTransitionTime":{},"f:lastUpdateTime":{},"f:message":{},"f:reason":{},"f:status":{},"f:type":{}}},"f:observedGeneration":{},"f:readyReplicas":{},"f:replicas":{},"f:updatedReplicas":{}}},"manager":"kube-controller-manager","operation":"Update","time":"2022-10-31T20:18:49Z"}],"name":"comprasnet-crawler-h-deployment","namespace":"cgsis-h-php1-comprasnet-crawler","resourceVersion":"269596932","selfLink":"/apis/apps/v1/namespaces/cgsis-h-php1-comprasnet-crawler/deployments/comprasnet-crawler-h-deployment","uid":"e0293926-1ddc-47c7-bf9d-224058a61b54"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":3,"selector":{"matchLabels":{"app":"comprasnet-crawler-h"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"team":"CGSIS/PHP1"},"creationTimestamp":null,"labels":{"app":"comprasnet-crawler-h"}},"spec":{"containers":[{"env":[{"name":"app_name","valueFrom":{"secretKeyRef":{"key":"app_name","name":"comprasnet-crawler-secret"}}},{"name":"app_env","valueFrom":{"secretKeyRef":{"key":"app_env","name":"comprasnet-crawler-secret"}}},{"name":"app_debug","valueFrom":{"secretKeyRef":{"key":"app_debug","name":"comprasnet-crawler-secret"}}},{"name":"app_url","valueFrom":{"secretKeyRef":{"key":"app_url","name":"comprasnet-crawler-secret"}}},{"name":"db_connection","valueFrom":{"secretKeyRef":{"key":"db_connection","name":"comprasnet-crawler-secret"}}},{"name":"db_host","valueFrom":{"secretKeyRef":{"key":"db_host","name":"comprasnet-crawler-secret"}}},{"name":"db_port","valueFrom":{"secretKeyRef":{"key":"db_port","name":"comprasnet-crawler-secret"}}},{"name":"db_database","valueFrom":{"secretKeyRef":{"key":"db_database","name":"comprasnet-crawler-secret"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"db_username","name":"comprasnet-crawler-secret"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"db_password","name":"comprasnet-crawler-secret"}}},{"name":"mail_mailer","valueFrom":{"secretKeyRef":{"key":"mail_mailer","name":"comprasnet-crawler-secret"}}},{"name":"mail_host","valueFrom":{"secretKeyRef":{"key":"mail_host","name":"comprasnet-crawler-secret"}}},{"name":"mail_port","valueFrom":{"secretKeyRef":{"key":"mail_port","name":"comprasnet-crawler-secret"}}},{"name":"mail_username","valueFrom":{"secretKeyRef":{"key":"mail_username","name":"comprasnet-crawler-secret"}}},{"name":"mail_password","valueFrom":{"secretKeyRef":{"key":"mail_password","name":"comprasnet-crawler-secret"}}},{"name":"mail_encryption","valueFrom":{"secretKeyRef":{"key":"mail_encryption","name":"comprasnet-crawler-secret"}}},{"name":"mail_from_address","valueFrom":{"secretKeyRef":{"key":"mail_from_address","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_base_url","valueFrom":{"secretKeyRef":{"key":"comprasnet_base_url","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_codigo_orgao","valueFrom":{"secretKeyRef":{"key":"comprasnet_codigo_orgao","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_codigo_ug","valueFrom":{"secretKeyRef":{"key":"comprasnet_codigo_ug","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_adm_emails","valueFrom":{"secretKeyRef":{"key":"comprasnet_adm_emails","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_support_emails","valueFrom":{"secretKeyRef":{"key":"comprasnet_support_emails","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_usuario_sistema","valueFrom":{"secretKeyRef":{"key":"comprasnet_usuario_sistema","name":"comprasnet-crawler-secret"}}},{"name":"comprasnet_senha_usuario","valueFrom":{"secretKeyRef":{"key":"comprasnet_senha_usuario","name":"comprasnet-crawler-secret"}}}],"image":"sdh-k8s2-registry.cgu.gov.br/comprasnet-crawler-h:7.20221031171158","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":6,"httpGet":{"path":"/monitoramento/status","port":"web-port","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"name":"comprasnet-crawler-h","ports":[{"containerPort":8080,"name":"web-port","protocol":"TCP"}],"readinessProbe":{"failureThreshold":18,"httpGet":{"path":"/monitoramento/status","port":"web-port","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"limits":{"cpu":"75m","memory":"512Mi"},"requests":{"cpu":"75m","memory":"512Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","imagePullSecrets":[{"name":"regcred"}],"restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}},"status":{"availableReplicas":1,"conditions":[{"lastTransitionTime":"2022-10-31T19:07:46Z","lastUpdateTime":"2022-10-31T20:14:11Z","message":"ReplicaSet \"comprasnet-crawler-h-deployment-b77dd4496\" has successfully progressed.","reason":"NewReplicaSetAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2022-10-31T20:18:49Z","lastUpdateTime":"2022-10-31T20:18:49Z","message":"Deployment has minimum availability.","reason":"MinimumReplicasAvailable","status":"True","type":"Available"}],"observedGeneration":41,"readyReplicas":1,"replicas":1,"updatedReplicas":1}}
+      kubernetes.io/change-cause: 2022-11-01 13:23:18 / Deploy via Jenkins (RollingUpdate)
+        / Atualizado para comprasnet-crawler-h:8.20221101132157
+      team: CGSIS/PHP1
+    creationTimestamp: "2022-08-02T11:47:24Z"
+    generation: 44
+    labels:
+      app: comprasnet-crawler-h
+    name: comprasnet-crawler-h-deployment
+    namespace: cgsis-h-php1-comprasnet-crawler
+    resourceVersion: "269885026"
+    selfLink: /apis/apps/v1/namespaces/cgsis-h-php1-comprasnet-crawler/deployments/comprasnet-crawler-h-deployment
+    uid: e0293926-1ddc-47c7-bf9d-224058a61b54
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 3
+    selector:
+      matchLabels:
+        app: comprasnet-crawler-h
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          team: CGSIS/PHP1
+        creationTimestamp: null
+        labels:
+          app: comprasnet-crawler-h
+      spec:
+        containers:
+        - env:
+          - name: app_name
+            valueFrom:
+              secretKeyRef:
+                key: app_name
+                name: comprasnet-crawler-secret
+          - name: app_env
+            valueFrom:
+              secretKeyRef:
+                key: app_env
+                name: comprasnet-crawler-secret
+          - name: app_debug
+            valueFrom:
+              secretKeyRef:
+                key: app_debug
+                name: comprasnet-crawler-secret
+          - name: app_url
+            valueFrom:
+              secretKeyRef:
+                key: app_url
+                name: comprasnet-crawler-secret
+          - name: db_connection
+            valueFrom:
+              secretKeyRef:
+                key: db_connection
+                name: comprasnet-crawler-secret
+          - name: db_host
+            valueFrom:
+              secretKeyRef:
+                key: db_host
+                name: comprasnet-crawler-secret
+          - name: db_port
+            valueFrom:
+              secretKeyRef:
+                key: db_port
+                name: comprasnet-crawler-secret
+          - name: db_database
+            valueFrom:
+              secretKeyRef:
+                key: db_database
+                name: comprasnet-crawler-secret
+          - name: db_username
+            valueFrom:
+              secretKeyRef:
+                key: db_username
+                name: comprasnet-crawler-secret
+          - name: db_password
+            valueFrom:
+              secretKeyRef:
+                key: db_password
+                name: comprasnet-crawler-secret
+          - name: mail_mailer
+            valueFrom:
+              secretKeyRef:
+                key: mail_mailer
+                name: comprasnet-crawler-secret
+          - name: mail_host
+            valueFrom:
+              secretKeyRef:
+                key: mail_host
+                name: comprasnet-crawler-secret
+          - name: mail_port
+            valueFrom:
+              secretKeyRef:
+                key: mail_port
+                name: comprasnet-crawler-secret
+          - name: mail_username
+            valueFrom:
+              secretKeyRef:
+                key: mail_username
+                name: comprasnet-crawler-secret
+          - name: mail_password
+            valueFrom:
+              secretKeyRef:
+                key: mail_password
+                name: comprasnet-crawler-secret
+          - name: mail_encryption
+            valueFrom:
+              secretKeyRef:
+                key: mail_encryption
+                name: comprasnet-crawler-secret
+          - name: mail_from_address
+            valueFrom:
+              secretKeyRef:
+                key: mail_from_address
+                name: comprasnet-crawler-secret
+          - name: comprasnet_base_url
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_base_url
+                name: comprasnet-crawler-secret
+          - name: comprasnet_codigo_orgao
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_codigo_orgao
+                name: comprasnet-crawler-secret
+          - name: comprasnet_codigo_ug
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_codigo_ug
+                name: comprasnet-crawler-secret
+          - name: comprasnet_adm_emails
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_adm_emails
+                name: comprasnet-crawler-secret
+          - name: comprasnet_support_emails
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_support_emails
+                name: comprasnet-crawler-secret
+          - name: comprasnet_usuario_sistema
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_usuario_sistema
+                name: comprasnet-crawler-secret
+          - name: comprasnet_senha_usuario
+            valueFrom:
+              secretKeyRef:
+                key: comprasnet_senha_usuario
+                name: comprasnet-crawler-secret
+          image: sdh-k8s2-registry.cgu.gov.br/comprasnet-crawler-h:8.20221101132157
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /monitoramento/status
+              port: web-port
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: comprasnet-crawler-h
+          ports:
+          - containerPort: 8080
+            name: web-port
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 18
+            httpGet:
+              path: /monitoramento/status
+              port: web-port
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources:
+            limits:
+              cpu: 75m
+              memory: 512Mi
+            requests:
+              cpu: 75m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: regcred
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2022-10-31T20:18:49Z"
+      lastUpdateTime: "2022-10-31T20:18:49Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2022-10-31T19:07:46Z"
+      lastUpdateTime: "2022-11-01T16:24:34Z"
+      message: ReplicaSet "comprasnet-crawler-h-deployment-748b84b597" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 44
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
