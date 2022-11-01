@@ -26,12 +26,12 @@ class Kernel extends ConsoleKernel
             'file_path' => $file_path
         ];
 
-        $schedule->command('comprasnet:contratos')
+        $schedule->command('comprasnet:contratos -e -c -i')
             ->cron('* 1 * * *')
             ->sendOutputTo($file_path)
-            ->onSuccess(function () use ($data) {
-                Mail::send(new DadosImportados($data));
-            })
+//            ->onSuccess(function () use ($data) {
+//                Mail::send(new DadosImportados($data));
+//            })
             ->onFailure(function () use ($data) {
                 Mail::send(new ErroImportacao($data));
             });
