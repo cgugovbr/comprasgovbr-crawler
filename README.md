@@ -1,13 +1,13 @@
-<div align="center"><img src="public/images/comprasnet.png" width="240" height="240"></div>
+<div align="center"><img src="resources/images/comprasgovbr.png" width="240" height="240"></div>
 
-# API Comprasnet Contratos
+# ComprasGovBr-Crawler
 
-Este sistema foi desenvolvido com o intuito de importar os dados do Comprasnet de um determinao órgão, 
-incluíndo Contratos, Empenhos, Cronograma e Histórico.
+Este sistema foi desenvolvido com o intuito de importar dados do ComprasGovBr de um determinao órgão, 
+incluíndo os respectivos contratos, empenhos, cronograma e histórico, para um banco de dados específico. 
 
-O sistema **NÃO** possui interface gráfica, somente scripts em PHP buscando os dados do Comprasnet para uma base local.
+> O sistema **NÃO** possui interface gráfica, somente scripts em PHP.
 
-## Tecnologia utilizada
+## Tecnologia
 
 Este sistema foi desenvolvido utilizando Laravel versão 9.
 
@@ -23,7 +23,9 @@ A licença dessa ferramenta é GPLv2. Pedimos que toda implementação seja disp
 ## Instalação
 
 **[IMPORTANTE]**
-Esta versão inicial foi desenvolvida para rodar utilizando o banco de dados SQL Server, portanto os arquivos de criação do banco (_migrations_) foram adaptados para atender às definições do órgão. Caso for utilizar MySQL ou Postgres como base de dados, as quais já possuem funções (_blueprint_) prontas no Laravel, será necessário uma pequena adaptação (simplificação) dos arquivos de criação do banco de dados (_migrations_). Os nomes dos campos foram adapatados para ajustar aos padrões do órgão, caso seja de seu interesse, ajustes os nomes das tabelas e colunas conforme sua instituição demandar.
+Esta versão utiliza SQL Server como banco de dados. Todos os arquivos de criação e versionamento do banco 
+de dados (_migrations_) foram adaptados ao SQL Server. Caso deseja utilizar MySQL ou PostreSQL poderá 
+simplificar os _migrations_.
 
 ### Requisitos Mímimos
 
@@ -46,11 +48,10 @@ Esta versão inicial foi desenvolvida para rodar utilizando o banco de dados SQL
 
 ### Primeiros passos
 
-
 #### 1. Faça o "clone" deste repositório
 
 ```bash
-git clone git@github.com:cgugovbr/comprasnet-crawler.git
+git clone git@github.com:cgugovbr/comprasgovbr-crawler.git
 ```
 
 ### 2. Instale as dependências
@@ -63,7 +64,7 @@ composer install
 
 ### 3. Configure as informações de sistema
 
-Crie o arquivo '.env' à partir do arquivo de exemplo '.env.example' e gere uma chave para sua aplicação:
+Crie o arquivo '.env' a partir do arquivo de exemplo '.env.example' e gere uma chave para a aplicação:
 ```bash
 cp .env.example .env
 php artisan key:generate
@@ -121,7 +122,7 @@ Execute o seguinte comando para criar a estrutura do banco de dados:
 php artisan migrate
 ```
 
-**TUDO PRONTO! Já pode chamar as rotinas para buscar seus dados na API do Comprasnet. 
+**TUDO PRONTO! Já pode chamar as rotinas para buscar seus dados na API do ComprasGovBr. 
 Os passos 4 e 5 (abaixo) somente deverão ser configurados nos ambientes de teste e produção.**
 
 ### 4. [PRODUÇÃO] Configurar o serviço cron do Linux
@@ -129,19 +130,19 @@ Os passos 4 e 5 (abaixo) somente deverão ser configurados nos ambientes de test
 Quando o sistema estiver em produção será necessário configurar o crontab do servidor 
 para chamar as rotins do sistema. Esta linha abaixo apenas configura para que o sistema
 fique constantemente sendo requisitado no ambiente em produção, porém a periodicidade das 
-requisições ao Comprasnet é determinado dentro do sistema. 
+requisições ao ComprasGovBr é determinado dentro do sistema. 
 Veja mais detalhes no item 5.
 
 ```bash
 echo "* * * * * root cd /var/www/ && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab
 ```
 
-> Atualize a raiz de sua aplicação na linha de comando acima ('/var/www')
+> Atualize a raiz da aplicação na linha de comando acima ('/var/www')
 
 ### 5. [PRODUÇÃO] Configurando a periodicidade
 
 Neste item poderemos configuarar a periodicidade das requsições de seus dados na API 
-do Comprasnet Contratos. Para fazer essa configuração é necesário ter um breve conhecimento
+do ComprasGovBr Contratos. Para fazer essa configuração é necesário ter um breve conhecimento
 de crontab, que pode ser facilmente verificado no site: 
 [https://crontab.guru/](https://crontab.guru/).
 
@@ -156,6 +157,9 @@ Acesse o arquivo 'app\Console\Kernel.php' e edite a seguinte linha:
             // Edite esta linha abaixo com as configurações desejadas
             ->cron('0 5 * * *')
             ->sendOutputTo($file_path)
+            ->onSuccess(function () use ($data) {
+                Mail::send(new DadosImportados($data));
+            })
             ->onFailure(function () use ($data) {
                 Mail::send(new ErroImportacao($data));
             });
@@ -164,7 +168,7 @@ Acesse o arquivo 'app\Console\Kernel.php' e edite a seguinte linha:
 
 No exemplo acima o sistema ira importar os dados todos os dias às 5h da manhã.
 
-## Buscando os dados da API do Comprasnet Contratos
+## Buscando os dados da API do ComprasGovBr Contratos
 
 O sistema não possui interface gráfica, como citado anteriormente, 
 portanto acesse o terminal de sua aplicação e rode o seguinte comando:
@@ -233,6 +237,32 @@ fazer cache das configurações do sistema. Caso não esteja utilizando Docker,
 pode ser interessante verificar as configurações feitas pelo script para 
 reutilizar em seu ambiente de produção.
 
+## Desenvolvimento
+
+Caso deseja contruibuir com o desenvolvimento, para subir o ambiente local será necesário ter o Docker instalado
+e após clonar a aplicação rodar os seguintes comandos:
+
+### Instalar dependências:
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php80-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+### Iniciar a aplicação localmente
+```bash
+sail up
+```
+
+Qualquer dúvida sobre o Sail acesse [https://laravel.com/docs/sail](https://laravel.com/docs/sail)
+
 ## Contribuições
 
-Erros, dúvidas, sugestões etc favor criar iniciar uma discussão.
+Dúvidas ou sugestões favor iniciar uma discussão.
+
+Caso encontre algum erro favor criar um novo _issue_.
+
+> Caso encontre alguma falha de segurança pedimos a gentileza de nos enviar um email para [disol@cgu.gov.br](mailto:disol@cgu.gov.br)
