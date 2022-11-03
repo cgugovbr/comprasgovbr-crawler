@@ -14,9 +14,17 @@ RUN composer --no-ansi install --no-ansi --prefer-dist --no-dev --no-scripts --n
 #
 # App - container da aplicacao
 #
-FROM ubuntu:20.04
+FROM php:8.0.25-zts-alpine3.16
 
 LABEL maintainer="DISOL"
+
+# Configura timezone
+RUN apk add --no-cache tzdata && \
+    echo "America/Sao_Paulo" > /etc/timezone && \
+    cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && \
+    apk del tzdata
+
+# paramos aqui...
 
 ARG WWWGROUP=1001
 ARG NODE_VERSION=16
@@ -24,9 +32,6 @@ ARG POSTGRES_VERSION=13
 
 WORKDIR /var/www/html
 
-ENV TZ=UTC
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Configurar o idioma do sistema (locales)
 #RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -110,9 +115,9 @@ RUN chmod +x /usr/local/bin/start-container
 RUN composer --no-ansi dump-autoload --no-scripts --no-dev --no-interaction --optimize
 
 # Configura alias
-RUN echo "alias l='ls -la'" >> ~/.bash_profile && \
-    echo "alias l='ls -la'" >> ~/.bashrc && \
-    echo "alias a='php artisan'" >> ~/.bash_profile && \
+RUN echo "alias l='ls -la'" >> ~/.bash_profile \ &&
+    echo "alias l='ls -la'" >> ~/.bashrc \ &&
+    echo "alias a='php artisan'" >> ~/.bash_profile \ &&
     echo "alias a='php artisan'" >> ~/.bashrc
 
 # Configuracao para dev
