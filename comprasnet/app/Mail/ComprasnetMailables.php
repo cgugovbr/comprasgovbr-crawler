@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Mail;
+namespace Comprasnet\App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
+use Illuminate\Queue\SerializesModels;
 
 class ComprasnetMailables extends Mailable
 {

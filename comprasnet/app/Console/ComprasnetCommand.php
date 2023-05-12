@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Console;
+namespace Comprasnet\App\Console;
 
-use App\Models\Contrato;
-use App\Models\Cronograma;
-use App\Models\Empenho;
-use App\Models\Historico;
+use Comprasnet\App\Models\Empenho;
+use Comprasnet\App\Models\Contrato;
+use Comprasnet\App\Models\Historico;
+use Comprasnet\App\Models\Cronograma;
+use Comprasnet\App\Console\HttpCommand;
 
 class ComprasnetCommand extends HttpCommand
 {
     public function __construct()
     {
-        parent::__construct();
+        HttpCommand::__construct();
     }
 
     // Busca Contratos

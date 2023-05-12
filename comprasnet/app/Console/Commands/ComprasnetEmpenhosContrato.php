@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Comprasnet\App\Console\Commands;
 
-use App\Console\ComprasnetCommand;
-use App\Models\Contrato;
+use Comprasnet\App\Models\Contrato;
 use Illuminate\Support\Facades\Mail;
+use Comprasnet\App\Mail\DadosImportados;
+use Comprasnet\App\Console\ComprasnetCommand;
 
-class ComprasnetHistoricoContrato extends ComprasnetCommand
+class ComprasnetEmpenhosContrato extends ComprasnetCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'comprasnet:historico
+    protected $signature = 'comprasnet:empenhos
                             {contrato : Número do Contrato (IdContrato - ex: 2660)}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
@@ -24,7 +25,7 @@ class ComprasnetHistoricoContrato extends ComprasnetCommand
      *
      * @var string
      */
-    protected $description = 'Importar o Historico de um Contrato';
+    protected $description = 'Importar os Empenhos de um Contrato';
 
     /**
      * Create a new command instance.
@@ -53,20 +54,20 @@ class ComprasnetHistoricoContrato extends ComprasnetCommand
             $this->warn('----------------------------------------------------------------------');
             $this->error('Não encontramos o contrato ' . $contrato_id . ' na base de dados.');
             $this->line('');
-            $this->warn('Busque os dados do contrato antes de importar o historico:');
+            $this->warn('Busque os dados do contrato antes de importar os empenhos:');
             $this->warn('');
             $this->info('php artisan comprasnet:contrato ' . $contrato_id);
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkHistorico == '') {
+        } elseif ($contrato->EndLinkEmpenhos == '') {
             $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe historico vinculado à este contrato.');
+            $this->info('Não existe empenho vinculado à este contrato.');
             $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
-            $this->line('Importando o historico do contrato ' . $contrato_id);
-            $this->getHistoricosContrato($contrato->EndLinkHistorico, $contrato_id);
+            $this->line('Importando os empenhos do contrato ' . $contrato_id);
+            $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

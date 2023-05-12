@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Console;
+namespace Comprasnet\App\Console;
 
-use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Illuminate\Console\Command;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Facades\Http;
 use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 // use GuzzleHttp\Exception\RequestException;
@@ -20,7 +18,7 @@ class HttpCommand extends Command
     /**
      * The Guzzle object
      *
-     * @var guzzle
+     * @var \App\Console\guzzle
      */
     protected $client;
 

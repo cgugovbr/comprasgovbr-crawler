@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Comprasnet\App\Console\Commands;
 
-use App\Console\ComprasnetCommand;
-use App\Mail\DadosImportados;
 use Illuminate\Support\Facades\Mail;
+use Comprasnet\App\Mail\DadosImportados;
+use Comprasnet\App\Console\ComprasnetCommand;
 
 class ComprasnetContratosOrgao extends ComprasnetCommand
 {

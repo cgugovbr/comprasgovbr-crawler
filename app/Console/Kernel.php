@@ -3,14 +3,31 @@
 namespace App\Console;
 
 use Carbon\Carbon;
-use App\Mail\ErroImportacao;
-use App\Mail\DadosImportados;
 use Illuminate\Support\Facades\Mail;
+use Comprasnet\App\Mail\ErroImportacao;
+use Comprasnet\App\Mail\DadosImportados;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Comprasnet\App\Console\Commands\ComprasnetContratosOrgao;
+use Comprasnet\App\Console\Commands\ComprasnetEmpenhosContrato;
+use Comprasnet\App\Console\Commands\ComprasnetHistoricoContrato;
+use Comprasnet\App\Console\Commands\ComprasnetCronogramaContrato;
 
 class Kernel extends ConsoleKernel
 {
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
+        ComprasnetContratosOrgao::class,
+        ComprasnetEmpenhosContrato::class,
+        ComprasnetHistoricoContrato::class,
+        ComprasnetCronogramaContrato::class,
+    ];
+
+
     /**
      * Define the application's command schedule.
      *
@@ -45,6 +62,8 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/../../comprasnet/app/Console');
+        $this->load(__DIR__ . '/../../comprasnet/app/Console/Commands');
 
         require base_path('routes/console.php');
     }

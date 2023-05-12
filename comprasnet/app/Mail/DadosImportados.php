@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Mail;
+namespace Comprasnet\App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 
-class ErroImportacao extends ComprasnetMailables
+class DadosImportados extends ComprasnetMailables
 {
     use Queueable, SerializesModels;
 
@@ -32,11 +32,11 @@ class ErroImportacao extends ComprasnetMailables
     {
         if ($this->dados) {
             return $this->to($this->emails_to)
-                ->markdown('emails.erro.importacao')
+                ->markdown('emails.dados.importados')
                 ->attach($this->dados['file_path']);
         } else {
             return $this->to($this->emails_to)
-                ->markdown('emails.erro.importacao');
+                ->markdown('emails.dados.importados');
         }
     }
 }

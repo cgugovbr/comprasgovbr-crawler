@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Comprasnet\App\Console\Commands;
 
-use App\Console\ComprasnetCommand;
-use App\Models\Contrato;
-use App\Mail\DadosImportados;
+use Comprasnet\App\Models\Contrato;
 use Illuminate\Support\Facades\Mail;
+use App\Console\Commands\DadosImportados;
+use Comprasnet\App\Console\ComprasnetCommand;
 
-class ComprasnetEmpenhosContrato extends ComprasnetCommand
+class ComprasnetCronogramaContrato extends ComprasnetCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'comprasnet:empenhos
+    protected $signature = 'comprasnet:cronograma
                             {contrato : Número do Contrato (IdContrato - ex: 2660)}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
@@ -25,7 +25,7 @@ class ComprasnetEmpenhosContrato extends ComprasnetCommand
      *
      * @var string
      */
-    protected $description = 'Importar os Empenhos de um Contrato';
+    protected $description = 'Importar o Cronograma de um Contrato';
 
     /**
      * Create a new command instance.
@@ -54,20 +54,20 @@ class ComprasnetEmpenhosContrato extends ComprasnetCommand
             $this->warn('----------------------------------------------------------------------');
             $this->error('Não encontramos o contrato ' . $contrato_id . ' na base de dados.');
             $this->line('');
-            $this->warn('Busque os dados do contrato antes de importar os empenhos:');
+            $this->warn('Busque os dados do contrato antes de importar o cronograma:');
             $this->warn('');
             $this->info('php artisan comprasnet:contrato ' . $contrato_id);
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkEmpenhos == '') {
+        } elseif ($contrato->EndLinkCronograma == '') {
             $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe empenho vinculado à este contrato.');
+            $this->info('Não existe cronograma vinculado à este contrato.');
             $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
-            $this->line('Importando os empenhos do contrato ' . $contrato_id);
-            $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $contrato_id);
+            $this->line('Importando o cronograma do contrato ' . $contrato_id);
+            $this->getCronogramasContrato($contrato->EndLinkCronograma, $contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

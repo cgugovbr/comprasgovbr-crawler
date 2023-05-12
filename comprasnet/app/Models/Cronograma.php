@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Comprasnet\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
