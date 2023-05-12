@@ -66,7 +66,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
 
         $url = $tipo . $orgao;
 
-        var_dump($url);
+        dd($tipo, $orgao, $url);
 
         $importaEmpenho = $this->option('empenho');
         $importaCronograma = $this->option('cronograma');
