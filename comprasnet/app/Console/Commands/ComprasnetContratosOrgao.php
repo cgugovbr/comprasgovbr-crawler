@@ -20,6 +20,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--i|historico : Importar histórico do contrato}
                             {--p|preposto : Importar prepostos do contrato}
                             {--f|fatura : Importar faturas do contrato}
+                            {--r|responsavel : Importar responsáveis do contrato}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
                             {--inativos : Importar os Contratos Inativos}
@@ -73,6 +74,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
         $importarHistorico = $this->option('historico');
         $importarPreposto = $this->option('preposto');
         $importarFatura = $this->option('fatura');
+        $importarResponsavel = $this->option('responsavel');
         $importarInativos = $this->option('inativos');
         $enviarEmail = $this->option('email');
         $enviarEmailTo = $this->option('email_to');
@@ -88,6 +90,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
         $this->line('Histórico: ' . ($importarHistorico ? 'sim' : 'não'));
         $this->line('Prepostos: ' . ($importarPreposto ? 'sim' : 'não'));
         $this->line('Fatura: ' . ($importarFatura ? 'sim' : 'não'));
+        $this->line('Responsável: ' . ($importarResponsavel ? 'sim' : 'não'));
         $this->line('Inativos: ' . ($importarInativos ? 'sim' : 'não'));
         $this->line('----------------------------------------------------------------------');
         $this->line('');
@@ -101,6 +104,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             'importarHistorico' => $importarHistorico,
             'importarPreposto' => $importarPreposto,
             'importarFatura' => $importarFatura,
+            'importarResponsavel' => $importarResponsavel,
         ];
 
         $this->getContratos($url, 'ativo', $importarArray);
