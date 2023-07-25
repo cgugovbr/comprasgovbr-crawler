@@ -40,6 +40,7 @@ class Contrato extends Model
         'EndLinkHistorico',
         'EndLinkEmpenhos',
         'EndLinkCronograma',
+        'EndLinkPrepostos',
         'DthCriadoEm',
         'DthAtualizadoEm'
     ];

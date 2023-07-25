@@ -4,6 +4,7 @@ namespace Comprasnet\App\Console;
 
 use Comprasnet\App\Models\Empenho;
 use Comprasnet\App\Models\Contrato;
+use Comprasnet\App\Models\Preposto;
 use Comprasnet\App\Models\Historico;
 use Comprasnet\App\Models\Cronograma;
 use Comprasnet\App\Console\HttpCommand;
@@ -16,7 +17,13 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Contratos
-    public function getContratos($url, $importarEmpenho = false, $importarCronograma = false, $importarHistorico = false, $situacaoContrato = 'ativo')
+    public function getContratos($url,
+                                 $situacaoContrato = 'ativo',
+                                 $importarEmpenho = false,
+                                 $importarCronograma = false,
+                                 $importarHistorico = false,
+                                 $importarPreposto = false
+    )
     {
         $response = $this->getData($url);
 
@@ -30,22 +37,28 @@ class ComprasnetCommand extends HttpCommand
 
                 $contrato = $this->addContrato($data, $situacaoContrato);
 
-                if ($importarEmpenho && $contrato->EndLinkEmpenhos != '') {
+                if (isset($importarEmpenho) && $importarEmpenho && $contrato->EndLinkEmpenhos != '') {
                     $this->info('');
                     $this->info('Importando Empenhos do contrato ' . $data['id']);
                     $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $data['id']);
                 }
 
-                if ($importarCronograma && $contrato->EndLinkCronograma != '') {
+                if (isset($importarCronograma) && $importarCronograma && $contrato->EndLinkCronograma != '') {
                     $this->info('');
                     $this->info('Importando Cronograma do contrato ' . $data['id']);
                     $this->getCronogramasContrato($contrato->EndLinkCronograma, $data['id']);
                 }
 
-                if ($importarHistorico && $contrato->EndLinkHistorico != '') {
+                if (isset($importarHistorico) && $importarHistorico && $contrato->EndLinkHistorico != '') {
                     $this->info('');
                     $this->info('Importando Histórico do contrato ' . $data['id']);
                     $this->getHistoricosContrato($contrato->EndLinkHistorico, $data['id']);
+                }
+
+                if (isset($importarPreposto) && $importarPreposto && $contrato->EndLinkPrepostos != '') {
+                    $this->info('');
+                    $this->info('Importando Prepostos do contrato ' . $data['id']);
+                    $this->getPrepostosContrato($contrato->EndLinkPrepostos, $data['id']);
                 }
 
                 $this->line('[Fim Contrato: ' . $data['id'] . ']--------------------------------------------------');
@@ -97,6 +110,7 @@ class ComprasnetCommand extends HttpCommand
         $contrato->EndLinkEmpenhos = (isset($data['links']['empenhos']) && $data['links']['empenhos'] <> '') ? $data['links']['empenhos'] : null;
         $contrato->EndLinkCronograma = (isset($data['links']['cronograma']) && $data['links']['cronograma'] <> '') ? $data['links']['cronograma'] : null;
         $contrato->EndLinkHistorico = (isset($data['links']['historico']) && $data['links']['historico'] <> '') ? $data['links']['historico'] : null;
+        $contrato->EndLinkPrepostos = (isset($data['links']['prepostos']) && $data['links']['prepostos'] <> '') ? $data['links']['prepostos'] : null;
 
         $contrato->save();
 
@@ -259,5 +273,48 @@ class ComprasnetCommand extends HttpCommand
         $historico->save();
 
         $this->info('Historico para o contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
+    }
+
+    // Busca Empenhos de um Contrato
+    public function getPrepostosContrato($url, $contrato_id)
+    {
+        $response = $this->getData($url, true);
+
+        if ($response) {
+            foreach ($response as $data) {
+                $this->addPrepostoContrato($data, $contrato_id);
+            }
+        } else {
+            $this->warn('----------------------------------------------------------------------');
+            $this->warn('Não existe Preposto vinculado à este contrato.');
+            $this->warn('----------------------------------------------------------------------');
+        }
+    }
+
+    // Adiciona/Atualiza Preposto de um Contrato
+    public function addPrepostoContrato($data, $contrato_id)
+    {
+        $preposto = Preposto::firstOrNew(
+            [
+                'IdPrepostoOriginal' => $data['id'],
+                'IdContrato' => $contrato_id
+            ]
+        );
+
+        $preposto->IdPrepostoOriginal = $data['id'];
+        $preposto->IdContrato = $contrato_id;
+        $preposto->NomUsuario = (isset($data['usuario']) && $data['usuario'] <> '') ? $data['usuario'] : null;
+        $preposto->EmlUsuario = (isset($data['email']) && $data['email'] <> '') ? $data['email'] : null;
+        $preposto->TelFixo = (isset($data['telefonefixo']) && $data['telefonefixo'] <> '') ? $data['telefonefixo'] : null;
+        $preposto->TelCelular = (isset($data['celular']) && $data['celular'] <> '') ? $data['celular'] : null;
+        $preposto->TxtDocFormalizacao = (isset($data['doc_formalizacao']) && $data['doc_formalizacao'] <> '') ? $data['doc_formalizacao'] : null;
+        $preposto->TxtInformacaoComplementar = (isset($data['informacao_complementar']) && $data['informacao_complementar'] <> '') ? $data['informacao_complementar'] : null;
+        $preposto->DatInicio = (isset($data['data_inicio']) && $data['data_inicio'] <> '') ? $data['data_inicio'] : null;
+        $preposto->DatFim = (isset($data['data_fim']) && $data['data_fim'] <> '') ? $data['data_fim'] : null;
+        $preposto->SitPreposto = (isset($data['situacao']) && $data['situacao'] <> '') ? $data['situacao'] : null;
+
+        $preposto->save();
+
+        $this->info('Preposto ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 }

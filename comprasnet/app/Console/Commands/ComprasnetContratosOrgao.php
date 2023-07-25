@@ -18,6 +18,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--e|empenho : Importar empenhos do contrato}
                             {--c|cronograma : Importar cronograma do contrato}
                             {--i|historico : Importar histórico do contrato}
+                            {--p|preposto : Importar prepostos do contrato}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
                             {--inativos : Importar os Contratos Inativos}
@@ -66,11 +67,10 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
 
         $url = $tipo . $orgao;
 
-        dd($tipo, $orgao, $url);
-
         $importaEmpenho = $this->option('empenho');
         $importaCronograma = $this->option('cronograma');
         $importaHistorico = $this->option('historico');
+        $importaPreposto = $this->option('preposto');
         $importaInativos = $this->option('inativos');
         $enviarEmail = $this->option('email');
         $enviarEmailTo = $this->option('email_to');
@@ -84,6 +84,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
         $this->line('Empenhos: ' . ($importaEmpenho ? 'sim' : 'não'));
         $this->line('Cronograma: ' . ($importaCronograma ? 'sim' : 'não'));
         $this->line('Histórico: ' . ($importaHistorico ? 'sim' : 'não'));
+        $this->line('Prepostos: ' . ($importaPreposto ? 'sim' : 'não'));
         $this->line('Inativos: ' . ($importaInativos ? 'sim' : 'não'));
         $this->line('----------------------------------------------------------------------');
         $this->line('');
@@ -91,7 +92,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
         $this->line('e da velocidade de sua conexão');
         $this->line('');
 
-        $this->getContratos($url, $importaEmpenho, $importaCronograma, $importaHistorico);
+        $this->getContratos($url, 'ativo', $importaEmpenho, $importaCronograma, $importaHistorico, $importaPreposto);
 
         if ($importaInativos) {
             $tipo = config('comprasnet.contratos.inativo_orgao');
@@ -100,7 +101,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             $situacaoContrato = 'inativo';
 
             $this->info('Buscando todos os Contratos INATIVOS');
-            $this->getContratos($url, $importaEmpenho, $importaCronograma, $importaHistorico, $situacaoContrato);
+            $this->getContratos($url, $situacaoContrato, $importaEmpenho, $importaCronograma, $importaHistorico, $importaPreposto);
         }
 
         if ($enviarEmail) {

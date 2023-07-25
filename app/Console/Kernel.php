@@ -11,6 +11,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Comprasnet\App\Console\Commands\ComprasnetContratosOrgao;
 use Comprasnet\App\Console\Commands\ComprasnetEmpenhosContrato;
 use Comprasnet\App\Console\Commands\ComprasnetHistoricoContrato;
+use Comprasnet\App\Console\Commands\ComprasnetPrepostosContrato;
 use Comprasnet\App\Console\Commands\ComprasnetCronogramaContrato;
 
 class Kernel extends ConsoleKernel
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         ComprasnetEmpenhosContrato::class,
         ComprasnetHistoricoContrato::class,
         ComprasnetCronogramaContrato::class,
+        ComprasnetPrepostosContrato::class,
     ];
 
 
