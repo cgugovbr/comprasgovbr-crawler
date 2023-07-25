@@ -2,6 +2,7 @@
 
 namespace Comprasnet\App\Console;
 
+use Comprasnet\App\Models\Fatura;
 use Comprasnet\App\Models\Empenho;
 use Comprasnet\App\Models\Contrato;
 use Comprasnet\App\Models\Preposto;
@@ -17,13 +18,7 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Contratos
-    public function getContratos($url,
-                                 $situacaoContrato = 'ativo',
-                                 $importarEmpenho = false,
-                                 $importarCronograma = false,
-                                 $importarHistorico = false,
-                                 $importarPreposto = false
-    )
+    public function getContratos($url, $situacaoContrato = 'ativo', $importarArray = [])
     {
         $response = $this->getData($url);
 
@@ -37,28 +32,34 @@ class ComprasnetCommand extends HttpCommand
 
                 $contrato = $this->addContrato($data, $situacaoContrato);
 
-                if (isset($importarEmpenho) && $importarEmpenho && $contrato->EndLinkEmpenhos != '') {
+                if (isset($importarArray['importarEmpenho']) && $importarArray['importarEmpenho'] == true && $contrato->EndLinkEmpenhos != '') {
                     $this->info('');
                     $this->info('Importando Empenhos do contrato ' . $data['id']);
                     $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $data['id']);
                 }
 
-                if (isset($importarCronograma) && $importarCronograma && $contrato->EndLinkCronograma != '') {
+                if (isset($importarArray['importarCronograma']) && $importarArray['importarCronograma'] == true && $contrato->EndLinkCronograma != '') {
                     $this->info('');
                     $this->info('Importando Cronograma do contrato ' . $data['id']);
                     $this->getCronogramasContrato($contrato->EndLinkCronograma, $data['id']);
                 }
 
-                if (isset($importarHistorico) && $importarHistorico && $contrato->EndLinkHistorico != '') {
+                if (isset($importarArray['importarHistorico']) && $importarArray['importarHistorico'] == true && $contrato->EndLinkHistorico != '') {
                     $this->info('');
                     $this->info('Importando Histórico do contrato ' . $data['id']);
                     $this->getHistoricosContrato($contrato->EndLinkHistorico, $data['id']);
                 }
 
-                if (isset($importarPreposto) && $importarPreposto && $contrato->EndLinkPrepostos != '') {
+                if (isset($importarArray['importarPreposto']) && $importarArray['importarPreposto'] == true && $contrato->EndLinkPrepostos != '') {
                     $this->info('');
                     $this->info('Importando Prepostos do contrato ' . $data['id']);
                     $this->getPrepostosContrato($contrato->EndLinkPrepostos, $data['id']);
+                }
+
+                if (isset($importarArray['importarFatura']) && $importarArray['importarFatura'] == true && $contrato->EndLinkFaturas != '') {
+                    $this->info('');
+                    $this->info('Importando Faturas do contrato ' . $data['id']);
+                    $this->getFaturasContrato($contrato->EndLinkFaturas, $data['id']);
                 }
 
                 $this->line('[Fim Contrato: ' . $data['id'] . ']--------------------------------------------------');
@@ -111,6 +112,9 @@ class ComprasnetCommand extends HttpCommand
         $contrato->EndLinkCronograma = (isset($data['links']['cronograma']) && $data['links']['cronograma'] <> '') ? $data['links']['cronograma'] : null;
         $contrato->EndLinkHistorico = (isset($data['links']['historico']) && $data['links']['historico'] <> '') ? $data['links']['historico'] : null;
         $contrato->EndLinkPrepostos = (isset($data['links']['prepostos']) && $data['links']['prepostos'] <> '') ? $data['links']['prepostos'] : null;
+        $contrato->EndLinkFaturas = (isset($data['links']['faturas']) && $data['links']['faturas'] <> '') ? $data['links']['faturas'] : null;
+        $contrato->EndLinkResponsaveis = (isset($data['links']['responsaveis']) && $data['links']['responsaveis'] <> '') ? $data['links']['responsaveis'] : null;
+        $contrato->EndLinkArquivos = (isset($data['links']['arquivos']) && $data['links']['arquivos'] <> '') ? $data['links']['arquivos'] : null;
 
         $contrato->save();
 
@@ -316,5 +320,60 @@ class ComprasnetCommand extends HttpCommand
         $preposto->save();
 
         $this->info('Preposto ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
+    }
+
+    // Busca Empenhos de um Contrato
+    public function getFaturasContrato($url, $contrato_id)
+    {
+        $response = $this->getData($url, true);
+
+        if ($response) {
+            foreach ($response as $data) {
+                $this->addFaturaContrato($data, $contrato_id);
+            }
+        } else {
+            $this->warn('----------------------------------------------------------------------');
+            $this->warn('Não existe Fatura para este contrato.');
+            $this->warn('----------------------------------------------------------------------');
+        }
+    }
+
+    // Adiciona/Atualiza Fatura de um Contrato
+    public function addFaturaContrato($data, $contrato_id)
+    {
+        $preposto = Fatura::firstOrNew(
+            [
+                'IdFaturaOriginal' => $data['id'],
+                'IdContrato' => $contrato_id
+            ]
+        );
+
+        $preposto->IdFaturaOriginal = $data['id'];
+        $preposto->IdContrato = $contrato_id;
+        $preposto->TipoListaFaturaId = (isset($data['tipolistafatura_id']) && $data['tipolistafatura_id'] <> '') ? $data['tipolistafatura_id'] : null;
+        $preposto->TxtJustificativaFaturaId = (isset($data['justificativafatura_id']) && $data['justificativafatura_id'] <> '') ? $data['justificativafatura_id'] : null;
+        $preposto->TxtSfPadraoId = (isset($data['sfadrao_id']) && $data['sfadrao_id'] <> '') ? $data['sfadrao_id'] : null;
+        $preposto->NumFatura = (isset($data['numero']) && $data['numero'] <> '') ? $data['numero'] : null;
+        $preposto->DatEmissao = (isset($data['emissao']) && $data['emissao'] <> '') ? $data['emissao'] : null;
+        $preposto->DatPrazo = (isset($data['prazo']) && $data['prazo'] <> '') ? $data['prazo'] : null;
+        $preposto->DatVencimento = (isset($data['vencimento']) && $data['vencimento'] <> '') ? $data['vencimento'] : null;
+        $preposto->ValValor = (isset($data['valor']) && $data['valor'] <> '') ? str_replace(['.', ','], ['', '.'], $data['valor']) : null;
+        $preposto->ValJuros = (isset($data['juros']) && $data['juros'] <> '') ? str_replace(['.', ','], ['', '.'], $data['juros']) : null;
+        $preposto->ValMulta = (isset($data['multa']) && $data['multa'] <> '') ? str_replace(['.', ','], ['', '.'], $data['multa']) : null;
+        $preposto->ValGlosa = (isset($data['glosa']) && $data['glosa'] <> '') ? str_replace(['.', ','], ['', '.'], $data['glosa']) : null;
+        $preposto->ValValorLiquido = (isset($data['valorliquido']) && $data['valorliquido'] <> '') ? str_replace(['.', ','], ['', '.'], $data['valorliquido']) : null;
+        $preposto->NumProcesso = (isset($data['processo']) && $data['processo'] <> '') ? $data['processo'] : null;
+        $preposto->DatProtocolo = (isset($data['protocolo']) && $data['protocolo'] <> '') ? $data['protocolo'] : null;
+        $preposto->DatAteste = (isset($data['ateste']) && $data['ateste'] <> '') ? $data['ateste'] : null;
+        $preposto->SitRepactuacao = (isset($data['repactuacao']) && $data['repactuacao'] <> '') ? $data['repactuacao'] : null;
+        $preposto->TxtInfComplementar = (isset($data['infcomplementar']) && $data['infcomplementar'] <> '') ? $data['infcomplementar'] : null;
+        $preposto->TxtMesRef = (isset($data['mesref']) && $data['mesref'] <> '') ? $data['mesref'] : null;
+        $preposto->TxtAnoRef = (isset($data['anoref']) && $data['anoref'] <> '') ? $data['anoref'] : null;
+        $preposto->SitFatura = (isset($data['situacao']) && $data['situacao'] <> '') ? $data['situacao'] : null;
+        $preposto->TxtChaveNfe = (isset($data['chave_nfe']) && $data['chave_nfe'] <> '') ? $data['chave_nfe'] : null;
+
+        $preposto->save();
+
+        $this->info('Fatura ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 }

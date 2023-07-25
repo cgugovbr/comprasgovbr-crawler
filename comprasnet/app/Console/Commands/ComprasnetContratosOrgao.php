@@ -19,6 +19,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--c|cronograma : Importar cronograma do contrato}
                             {--i|historico : Importar histórico do contrato}
                             {--p|preposto : Importar prepostos do contrato}
+                            {--f|fatura : Importar faturas do contrato}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
                             {--inativos : Importar os Contratos Inativos}
@@ -67,11 +68,12 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
 
         $url = $tipo . $orgao;
 
-        $importaEmpenho = $this->option('empenho');
-        $importaCronograma = $this->option('cronograma');
-        $importaHistorico = $this->option('historico');
-        $importaPreposto = $this->option('preposto');
-        $importaInativos = $this->option('inativos');
+        $importarEmpenho = $this->option('empenho');
+        $importarCronograma = $this->option('cronograma');
+        $importarHistorico = $this->option('historico');
+        $importarPreposto = $this->option('preposto');
+        $importarFatura = $this->option('fatura');
+        $importarInativos = $this->option('inativos');
         $enviarEmail = $this->option('email');
         $enviarEmailTo = $this->option('email_to');
 
@@ -81,27 +83,35 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
         $this->line('');
         $this->line('Orgao: ' . $orgao);
         $this->line('');
-        $this->line('Empenhos: ' . ($importaEmpenho ? 'sim' : 'não'));
-        $this->line('Cronograma: ' . ($importaCronograma ? 'sim' : 'não'));
-        $this->line('Histórico: ' . ($importaHistorico ? 'sim' : 'não'));
-        $this->line('Prepostos: ' . ($importaPreposto ? 'sim' : 'não'));
-        $this->line('Inativos: ' . ($importaInativos ? 'sim' : 'não'));
+        $this->line('Empenhos: ' . ($importarEmpenho ? 'sim' : 'não'));
+        $this->line('Cronograma: ' . ($importarCronograma ? 'sim' : 'não'));
+        $this->line('Histórico: ' . ($importarHistorico ? 'sim' : 'não'));
+        $this->line('Prepostos: ' . ($importarPreposto ? 'sim' : 'não'));
+        $this->line('Fatura: ' . ($importarFatura ? 'sim' : 'não'));
+        $this->line('Inativos: ' . ($importarInativos ? 'sim' : 'não'));
         $this->line('----------------------------------------------------------------------');
         $this->line('');
         $this->line('Isso pode demorar alguns minutos dependento da quantidade de dados');
         $this->line('e da velocidade de sua conexão');
         $this->line('');
 
-        $this->getContratos($url, 'ativo', $importaEmpenho, $importaCronograma, $importaHistorico, $importaPreposto);
+        $importarArray = [
+            'importarEmpenho' => $importarEmpenho,
+            'importarCronograma' => $importarCronograma,
+            'importarHistorico' => $importarHistorico,
+            'importarPreposto' => $importarPreposto,
+            'importarFatura' => $importarFatura,
+        ];
 
-        if ($importaInativos) {
+        $this->getContratos($url, 'ativo', $importarArray);
+
+        if ($importarInativos) {
             $tipo = config('comprasnet.contratos.inativo_orgao');
             $orgao = null !== $this->argument('orgao') ? $this->argument('orgao') : config('comprasnet.orgao');
             $url = $tipo . $orgao;
-            $situacaoContrato = 'inativo';
 
             $this->info('Buscando todos os Contratos INATIVOS');
-            $this->getContratos($url, $situacaoContrato, $importaEmpenho, $importaCronograma, $importaHistorico, $importaPreposto);
+            $this->getContratos($url, 'inativo', $importarArray);
         }
 
         if ($enviarEmail) {

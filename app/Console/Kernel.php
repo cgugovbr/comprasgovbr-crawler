@@ -9,6 +9,7 @@ use Comprasnet\App\Mail\DadosImportados;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Comprasnet\App\Console\Commands\ComprasnetContratosOrgao;
+use Comprasnet\App\Console\Commands\ComprasnetFaturasContrato;
 use Comprasnet\App\Console\Commands\ComprasnetEmpenhosContrato;
 use Comprasnet\App\Console\Commands\ComprasnetHistoricoContrato;
 use Comprasnet\App\Console\Commands\ComprasnetPrepostosContrato;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         ComprasnetHistoricoContrato::class,
         ComprasnetCronogramaContrato::class,
         ComprasnetPrepostosContrato::class,
+        ComprasnetFaturasContrato::class,
     ];
 
 
