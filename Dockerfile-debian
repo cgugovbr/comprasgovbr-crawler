@@ -1,0 +1,159 @@
+#
+# Dockerfile
+#
+
+#
+# Composer - container temporario para instalar os pacotes do php
+#
+#FROM composer:2 as composer
+#WORKDIR /app
+#COPY ./composer.json composer.json
+#COPY ./composer.lock composer.lock
+#RUN composer --no-ansi install --no-ansi --prefer-dist --no-dev --no-scripts --no-interaction --ignore-platform-reqs --no-autoloader
+#
+##
+# App - container da aplicacao
+#
+FROM php:8.0.25-zts-bullseye
+
+LABEL maintainer="DISOL"
+
+ARG WWWUSER=cguser
+ARG WWWGROUP=1000
+
+WORKDIR /var/www/html
+
+ENV TZ="America/Sao_Paulo"
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt update && \
+    apt install -y --no-install-recommends gnupg unixodbc-dev && \
+#    apt install -y --no-install-recommends gnupg curl apt-transport-https wget unixodbc-dev && \
+#    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
+#    echo "deb https://packages.sury.org/php/ bullseye main" > /etc/apt/sources.list.d/php.list && \
+#    apt update && \
+#    apt-get install -y php8.1 php8.1-dev php8.1-xml php8.1-intl
+    pecl install sqlsrv && \
+    pecl install pdo_sqlsrv && \
+    echo "end install"
+#    printf "; priority=20\nextension=sqlsrv.so\n" > /usr/local/etc/php/conf.d/sqlsrv.ini
+#    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /usr/local/etc/php/conf.d/pdo_sqlsrv.ini
+
+RUN printf "; priority=20\nextension=sqlsrv.so\n" > /usr/local/etc/php/conf.d/sqlsrv.ini
+RUN printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /usr/local/etc/php/conf.d/pdo_sqlsrv.ini
+
+
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt update && \
+    ACCEPT_EULA=Y apt install -y msodbcsql17 && \
+#    ACCEPT_EULA=Y apt-get install -y mssql-tools18 && \
+    echo "fim"
+#    # optional: for bcp and sqlcmd
+#    sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18
+#    echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+#    source ~/.bashrc
+#    # optional: for unixODBC development headers
+#    sudo apt-get install -y unixodbc-dev
+#    # optional: kerberos library for debian-slim distributions
+#    sudo apt-get install -y libgssapi-krb5-2
+
+#sudo su
+#sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+#locale-gen
+#
+#exit
+#sudo phpenmod -v 8.1 sqlsrv pdo_sqlsrv
+
+
+#RUN apt-get update \
+#    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor libcap2-bin libpng-dev python2 \
+#    && mkdir -p ~/.gnupg \
+#    && chmod 600 ~/.gnupg \
+#    && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
+#    && echo "keyserver hkp://keyserver.ubuntu.com:80" >> ~/.gnupg/dirmngr.conf \
+#    && gpg --recv-key 0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c \
+#    && gpg --export 0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c > /usr/share/keyrings/ppa_ondrej_php.gpg \
+#    && echo "deb [signed-by=/usr/share/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
+#    && apt-get update \
+#    && apt-get install -y php8.0-cli php8.0-dev \
+#       php8.0-pgsql php8.0-sqlite3 php8.0-gd \
+#       php8.0-curl php8.0-memcached \
+#       php8.0-imap php8.0-mysql php8.0-mbstring \
+#       php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
+#       php8.0-intl php8.0-readline php8.0-pcov \
+#       php8.0-msgpack php8.0-igbinary php8.0-ldap \
+#       php8.0-redis php8.0-swoole php8.0-xdebug \
+#    && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
+#    && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
+#    && apt-get install -y nodejs \
+#    && npm install -g npm \
+#    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null \
+#    && echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
+#    && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /usr/share/keyrings/pgdg.gpg >/dev/null \
+#    && echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+#    && apt-get update \
+#    && apt-get install -y yarn \
+#    && apt-get install -y mysql-client \
+#    && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+#    && apt-get -y autoremove \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#
+#RUN update-alternatives --set php /usr/bin/php8.0
+#
+#RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
+#
+#RUN groupadd --force -g $WWWGROUP $WWWUSER
+#RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 $WWWUSER
+#
+## Configuracao para SqlServer
+#RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+#    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+#    && apt-get update \
+#    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+#    && ACCEPT_EULA=Y apt-get install -y mssql-tools \
+#    && apt-get install -y gcc unixodbc unixodbc-dev musl-dev make \
+#    && apt-get -y autoremove \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN pecl install sqlsrv
+#RUN pecl install pdo_sqlsrv
+#RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.0/mods-available/sqlsrv.ini
+#RUN printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.0/mods-available/pdo_sqlsrv.ini
+#RUN phpenmod sqlsrv pdo_sqlsrv
+#RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+#
+## Copia dados do container temporário composer
+#COPY --from=composer /app /var/www/html
+#
+## Copia código da aplicação
+COPY . /var/www/html
+#
+COPY ./docker/production/start-container /usr/local/bin/start-container
+#COPY ./docker/production/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#COPY ./docker/production/php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
+#RUN chmod +x /usr/local/bin/start-container
+#
+## Cria composer autoloader
+#RUN composer --no-ansi dump-autoload --no-scripts --no-dev --no-interaction --optimize
+#
+## Configura alias
+#RUN echo "alias l='ls -la'" >> ~/.bash_profile \ &&
+#    echo "alias l='ls -la'" >> ~/.bashrc \ &&
+#    echo "alias a='php artisan'" >> ~/.bash_profile \ &&
+#    echo "alias a='php artisan'" >> ~/.bashrc
+#
+## Configuracao para dev
+#RUN apt-get update \
+#    && apt-get install -y vim iproute2 cron telnet \
+#    && apt-get -y autoremove \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#
+#EXPOSE 8000
+#
+ENTRYPOINT ["start-container"]
+
+#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
