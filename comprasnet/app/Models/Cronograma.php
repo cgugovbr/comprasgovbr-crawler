@@ -14,6 +14,7 @@ class Cronograma extends Model
 
     protected $fillable = [
         'IdCronograma',
+        'IdCronogramaOriginal',
         'IdContrato',
         'TpCronograma',
         'NumEmpenho',

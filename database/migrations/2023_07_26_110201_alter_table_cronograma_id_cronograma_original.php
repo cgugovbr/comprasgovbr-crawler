@@ -7,7 +7,7 @@ use App\Schemas\Blueprints\CustomBlueprint;
 use App\Schemas\Grammars\CustomGrammar;
 use Illuminate\Support\Facades\DB;
 
-class AlterTableHistoricoIdHistoricoOriginal extends Migration
+class AlterTableCronogramaIdCronogramaOriginal extends Migration
 {
     /**
      * Run the migrations.
@@ -23,11 +23,11 @@ class AlterTableHistoricoIdHistoricoOriginal extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->table('Historico', function (Blueprint $table) {
-            $table->bigInteger('IdHistoricoOriginal')->nullable()->after('IdHistorico'); // After não funciona para o sql server
+        $schema->table('Cronograma', function (Blueprint $table) {
+            $table->bigInteger('IdCronogramaOriginal')->nullable();
 
             // Indices
-            $table->index('IdHistoricoOriginal', 'Idx_Historico_IdHistoricoOriginal');
+            $table->index('IdCronogramaOriginal', 'Idx_Cronograma_IdCronogramaOriginal');
         });
     }
 
@@ -38,9 +38,9 @@ class AlterTableHistoricoIdHistoricoOriginal extends Migration
      */
     public function down()
     {
-        Schema::table('Historico', function (Blueprint $table) {
-            $table->dropIndex('Idx_Historico_IdHistoricoOriginal');
-            $table->dropColumn('IdHistoricoOriginal');
+        Schema::table('Cronograma', function (Blueprint $table) {
+            $table->dropIndex('Idx_Cronograma_IdCronogramaOriginal');
+            $table->dropColumn('IdCronogramaOriginal');
         });
     }
 }

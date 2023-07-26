@@ -181,9 +181,6 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
-            // Delete cronograma do contrato
-            Cronograma::where('IdContrato', '=', $contrato_id)->delete();
-
             foreach ($response as $data) {
                 $this->addCronogramaContrato($data, $contrato_id);
             }
@@ -197,8 +194,14 @@ class ComprasnetCommand extends HttpCommand
     // Adiciona/Atualiza Cronograma de um Contrato
     public function addCronogramaContrato($data, $contrato_id)
     {
-        $cronograma = new Cronograma;
+        $cronograma = Cronograma::firstOrNew(
+            [
+                'IdCronogramaOriginal' => $data['id'],
+                'IdContrato' => $contrato_id
+            ]
+        );
 
+        $cronograma->IdCronogramaOriginal = $data['id'];
         $cronograma->IdContrato = $contrato_id;
         $cronograma->TpCronograma = (isset($data['tipo']) && $data['tipo'] <> '') ? $data['tipo'] : null;
         $cronograma->NumCronograma = (isset($data['numero']) && $data['numero'] <> '') ? $data['numero'] : null;
