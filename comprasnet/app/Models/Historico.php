@@ -14,6 +14,7 @@ class Historico extends Model
 
     protected $fillable = [
         'IdHistorico',
+        'IdHistoricoOriginal',
         'IdContrato',
         'TxtReceitaDespesa',
         'NumContrato',

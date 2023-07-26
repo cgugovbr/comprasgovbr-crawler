@@ -221,9 +221,6 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
-            // Deleta histórico do contrato
-            Historico::where('IdContrato', '=', $contrato_id)->delete();
-
             foreach ($response as $data) {
                 $this->addHistoricoContrato($data, $contrato_id);
             }
@@ -237,7 +234,14 @@ class ComprasnetCommand extends HttpCommand
     // Adiciona/Atualiza Histórico de um Contrato
     public function addHistoricoContrato($data, $contrato_id)
     {
-        $historico = new Historico;
+        $historico = Historico::firstOrNew(
+            [
+                'IdHistoricoOriginal' => $data['id'],
+                'IdContrato' => $contrato_id
+            ]
+        );
+
+        $historico->IdHistoricoOriginal = $data['id'];
 
         $historico->IdContrato = $contrato_id;
 
