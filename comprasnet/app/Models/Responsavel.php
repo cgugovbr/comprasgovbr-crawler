@@ -8,7 +8,7 @@ class Responsavel extends Model
 {
     public $timestamps = false;
 
-    protected $primaryKey = 'IdFatura';
+    protected $primaryKey = 'IdResponsavel';
 
     protected $table = 'Responsavel';
 

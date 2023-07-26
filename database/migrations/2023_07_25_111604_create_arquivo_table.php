@@ -7,7 +7,7 @@ use App\Schemas\Blueprints\CustomBlueprint;
 use App\Schemas\Grammars\CustomGrammar;
 use Illuminate\Support\Facades\DB;
 
-class CreateResponsavelTable extends Migration
+class CreateArquivoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -23,26 +23,26 @@ class CreateResponsavelTable extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->create('Responsavel', function (Blueprint $table) {
+        $schema->create('Arquivo', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdResponsavel');
-            $table->bigInteger('IdResponsavelOriginal');
+            $table->increments('IdArquivo');
+            $table->bigInteger('IdArquivoOriginal');
             $table->integer('IdContrato')->unsigned()->nullable();
-            $table->varChar('NomUsuario')->nullable();
-            $table->varChar('TxtFuncaoId')->nullable();
-            $table->varChar('TxtInstalacaoId')->nullable();
-            $table->varChar('TxtPortaria')->nullable();
-            $table->varChar('SitResponsavel')->nullable();
-            $table->date('DatInicio')->nullable();
-            $table->date('DatFim')->nullable();
+            $table->varChar('TipArquivo')->nullable();
+            $table->varChar('NumProcesso')->nullable();
+            $table->varChar('NumSequencialDocumento')->nullable();
+            $table->varChar('TxtDescricao')->nullable();
+            $table->varChar('TxtPathArquivo')->nullable();
+            $table->varChar('OriArquivo')->nullable();
+            $table->varChar('UrlLinkSei')->nullable();
 
             // Indices
-            $table->index('IdResponsavelOriginal', 'Idx_Responsavel_IdResponsavelOriginal');
+            $table->index('IdArquivoOriginal', 'Idx_Arquivo_IdArquivoOriginal');
         });
 
-        Schema::table('Responsavel', function (Blueprint $table) {
-            $table->foreign('IdContrato', 'FK_Responsavel_Contrato')->references('IdContrato')->on('Contrato')->onDelete('cascade');
+        Schema::table('Arquivo', function (Blueprint $table) {
+            $table->foreign('IdContrato', 'FK_Arquivo_Contrato')->references('IdContrato')->on('Contrato')->onDelete('cascade');
         });
     }
 
@@ -53,6 +53,6 @@ class CreateResponsavelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Responsavel');
+        Schema::dropIfExists('Arquivo');
     }
 }

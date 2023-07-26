@@ -4,12 +4,12 @@ namespace Comprasnet\App\Console;
 
 use Comprasnet\App\Models\Fatura;
 use Comprasnet\App\Models\Empenho;
+use Comprasnet\App\Models\Arquivo;
 use Comprasnet\App\Models\Contrato;
 use Comprasnet\App\Models\Preposto;
 use Comprasnet\App\Models\Historico;
 use Comprasnet\App\Models\Cronograma;
 use Comprasnet\App\Models\Responsavel;
-use Comprasnet\App\Console\HttpCommand;
 
 class ComprasnetCommand extends HttpCommand
 {
@@ -67,6 +67,12 @@ class ComprasnetCommand extends HttpCommand
                     $this->info('');
                     $this->info('Importando Responsaveis do contrato ' . $data['id']);
                     $this->getResponsaveisContrato($contrato->EndLinkResponsaveis, $data['id']);
+                }
+
+                if (isset($importarArray['importarArquivo']) && $importarArray['importarArquivo'] == true && $contrato->EndLinkArquivos != '') {
+                    $this->info('');
+                    $this->info('Importando Arquivos do contrato ' . $data['id']);
+                    $this->getArquivosContrato($contrato->EndLinkArquivos, $data['id']);
                 }
 
                 $this->line('[Fim Contrato: ' . $data['id'] . ']--------------------------------------------------');
@@ -293,7 +299,7 @@ class ComprasnetCommand extends HttpCommand
         $this->info('Historico para o contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 
-    // Busca Empenhos de um Contrato
+    // Busca Prepostos de um Contrato
     public function getPrepostosContrato($url, $contrato_id)
     {
         $response = $this->getData($url, true);
@@ -336,7 +342,7 @@ class ComprasnetCommand extends HttpCommand
         $this->info('Preposto ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 
-    // Busca Empenhos de um Contrato
+    // Busca Faturas de um Contrato
     public function getFaturasContrato($url, $contrato_id)
     {
         $response = $this->getData($url, true);
@@ -391,7 +397,7 @@ class ComprasnetCommand extends HttpCommand
         $this->info('Fatura ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 
-    // Busca Empenhos de um Contrato
+    // Busca Responsáveis de um Contrato
     public function getResponsaveisContrato($url, $contrato_id)
     {
         $response = $this->getData($url, true);
@@ -430,5 +436,46 @@ class ComprasnetCommand extends HttpCommand
         $responsavel->save();
 
         $this->info('Responsável ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
+    }
+
+    // Busca Arquivos de um Contrato
+    public function getArquivosContrato($url, $contrato_id)
+    {
+        $response = $this->getData($url, true);
+
+        if ($response) {
+            foreach ($response as $data) {
+                $this->addArquivoContrato($data, $contrato_id);
+            }
+        } else {
+            $this->warn('----------------------------------------------------------------------');
+            $this->warn('Não existe Arquivo para este contrato.');
+            $this->warn('----------------------------------------------------------------------');
+        }
+    }
+
+    // Adiciona/Atualiza Arquivo de um Contrato
+    public function addArquivoContrato($data, $contrato_id)
+    {
+        $arquivo = Arquivo::firstOrNew(
+            [
+                'IdArquivoOriginal' => $data['id'],
+                'IdContrato' => $contrato_id
+            ]
+        );
+
+        $arquivo->IdArquivoOriginal = $data['id'];
+        $arquivo->IdContrato = $contrato_id;
+        $arquivo->TipArquivo = (isset($data['tipo']) && $data['tipo'] <> '') ? $data['tipo'] : null;
+        $arquivo->NumProcesso = (isset($data['processo']) && $data['processo'] <> '') ? $data['processo'] : null;
+        $arquivo->NumSequencialDocumento = (isset($data['sequencial_documento']) && $data['sequencial_documento'] <> '') ? $data['sequencial_documento'] : null;
+        $arquivo->TxtDescricao = (isset($data['descricao']) && $data['descricao'] <> '') ? $data['descricao'] : null;
+        $arquivo->TxtPathArquivo = (isset($data['path_arquivo']) && $data['path_arquivo'] <> '') ? $data['path_arquivo'] : null;
+        $arquivo->OriArquivo = (isset($data['origem']) && $data['origem'] <> '') ? $data['origem'] : null;
+        $arquivo->UrlLinkSei = (isset($data['link_sei']) && $data['link_sei'] <> '') ? $data['link_sei'] : null;
+
+        $arquivo->save();
+
+        $this->info('Arquivo ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
     }
 }
