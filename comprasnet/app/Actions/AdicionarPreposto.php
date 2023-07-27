@@ -17,7 +17,7 @@ class AdicionarPreposto {
      *
      * @return void
      */
-    public static function addPrepostoContrato($data, $contrato_id, $command = null)
+    public static function addPrepostoContrato($data, $contrato_id, $command = null): void
     {
         try {
             $preposto = Preposto::firstOrNew(

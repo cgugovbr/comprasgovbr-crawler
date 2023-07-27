@@ -17,7 +17,7 @@ class AdicionarEmpenho {
      *
      * @return void
      */
-    public static function addEmpenhoContrato($data, $contrato_id, $command = null)
+    public static function addEmpenhoContrato($data, $contrato_id, $command = null): void
     {
         try {
             $empenho = Empenho::firstOrNew(

@@ -17,7 +17,7 @@ class AdicionarResponsavel {
      *
      * @return void
      */
-    public static function addResponsavelContrato($data, $contrato_id, $command = null)
+    public static function addResponsavelContrato($data, $contrato_id, $command = null): void
     {
         try {
             $responsavel = Responsavel::firstOrNew(

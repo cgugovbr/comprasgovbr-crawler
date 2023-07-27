@@ -17,7 +17,7 @@ class AdicionarHistorico {
      *
      * @return void
      */
-    public static function addHistoricoContrato($data, $contrato_id, $command = null)
+    public static function addHistoricoContrato($data, $contrato_id, $command = null): void
     {
         try {
             $historico = Historico::firstOrNew(

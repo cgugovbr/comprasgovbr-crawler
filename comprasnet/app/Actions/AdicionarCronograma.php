@@ -17,7 +17,7 @@ class AdicionarCronograma {
      *
      * @return void
      */
-    public static function addCronogramaContrato($data, $contrato_id, $command = null)
+    public static function addCronogramaContrato($data, $contrato_id, $command = null): void
     {
         try {
             $cronograma = Cronograma::firstOrNew(

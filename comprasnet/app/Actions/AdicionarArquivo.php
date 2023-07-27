@@ -17,7 +17,7 @@ class AdicionarArquivo {
      *
      * @return void
      */
-    public static function addArquivoContrato($data, $contrato_id, $command = null)
+    public static function addArquivoContrato($data, $contrato_id, $command = null): void
     {
         try {
             $arquivo = Arquivo::firstOrNew(

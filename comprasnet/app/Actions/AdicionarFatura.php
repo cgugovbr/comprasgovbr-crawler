@@ -17,7 +17,7 @@ class AdicionarFatura {
      *
      * @return void
      */
-    public static function addFaturaContrato($data, $contrato_id, $command = null)
+    public static function addFaturaContrato($data, $contrato_id, $command = null): void
     {
         try {
             $fatura = Fatura::firstOrNew(
