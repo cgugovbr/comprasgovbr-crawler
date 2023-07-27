@@ -26,9 +26,9 @@ class CreatePrepostoTable extends Migration
         $schema->create('Preposto', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdPreposto');
+            $table->bigIncrements('IdPreposto');
             $table->bigInteger('IdPrepostoOriginal');
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
             $table->varChar('NomUsuario')->nullable();
             $table->varChar('EmlUsuario')->nullable();
             $table->varChar('TelFixo')->nullable();

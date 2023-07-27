@@ -26,9 +26,9 @@ class CreateCronogramaTable extends Migration
         $schema->create('Cronograma', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdCronograma')->generatedAs('1,1');
+            $table->bigIncrements('IdCronograma')->generatedAs('1,1');
 
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
 
             $table->varChar('TpCronograma')->nullable();
             $table->varChar('NumCronograma', 20)->nullable();

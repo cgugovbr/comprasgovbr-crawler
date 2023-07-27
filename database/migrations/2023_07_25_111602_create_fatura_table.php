@@ -26,9 +26,9 @@ class CreateFaturaTable extends Migration
         $schema->create('Fatura', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdFatura');
+            $table->bigIncrements('IdFatura');
             $table->bigInteger('IdFaturaOriginal');
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
             $table->varChar('TipoListaFaturaId')->nullable();
             $table->varChar('TxtJustificativaFaturaId')->nullable();
             $table->varChar('TxtSfPadraoId')->nullable();

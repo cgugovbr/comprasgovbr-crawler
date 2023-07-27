@@ -26,9 +26,9 @@ class CreateResponsavelTable extends Migration
         $schema->create('Responsavel', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdResponsavel');
+            $table->bigIncrements('IdResponsavel');
             $table->bigInteger('IdResponsavelOriginal');
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
             $table->varChar('NomUsuario')->nullable();
             $table->varChar('TxtFuncaoId')->nullable();
             $table->varChar('TxtInstalacaoId')->nullable();

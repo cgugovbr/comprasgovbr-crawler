@@ -26,9 +26,9 @@ class CreateEmpenhoTable extends Migration
         $schema->create('Empenho', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdEmpenho');
+            $table->bigIncrements('IdEmpenho');
 
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
             $table->varChar('NumEmpenho', 12);
             $table->varChar('NomCredor');
             $table->varChar('TxtPlanoInterno')->nullable();

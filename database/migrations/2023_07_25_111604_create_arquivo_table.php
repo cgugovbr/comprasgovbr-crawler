@@ -26,9 +26,9 @@ class CreateArquivoTable extends Migration
         $schema->create('Arquivo', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdArquivo');
+            $table->bigIncrements('IdArquivo');
             $table->bigInteger('IdArquivoOriginal');
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
             $table->varChar('TipArquivo')->nullable();
             $table->varChar('NumProcesso')->nullable();
             $table->varChar('NumSequencialDocumento')->nullable();
