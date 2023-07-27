@@ -18,9 +18,10 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v "$(pwd):/var/www/html" \
     -w /var/www/html \
-    laravelsail/php80-composer:latest \
+    laravelsail/php81-composer:latest \
     composer install --ignore-platform-reqs
 ```
+
 3. Criar o arquivo .env à partir do .env-example
 
 Substituir as variáveis de banco de dados para:
@@ -39,6 +40,8 @@ DB_PASSWORD=owdka3D&xYyfWrAodQ9cGa5
 ```bash
 ./vendor/bin/sail up
 ```
+
+> Ler a documentação do 'sail' em caso de dúvida quanto ao ambiente local de desenvolvimento - https://laravel.com/docs/sail
 
 5. Criar o banco de dados do ComprasNet Crawler
 
@@ -74,4 +77,5 @@ php artisan storage:link
 
 Acesse o browser e verifique se a aplicação está configurada corretamente acessado:
 
+http://localhost
 
