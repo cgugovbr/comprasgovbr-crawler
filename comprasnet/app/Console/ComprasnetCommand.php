@@ -2,17 +2,6 @@
 
 namespace Comprasnet\App\Console;
 
-use Comprasnet\App\Models\Fatura;
-use Comprasnet\App\Models\Empenho;
-use Comprasnet\App\Models\Arquivo;
-use Comprasnet\App\Models\Contrato;
-use Comprasnet\App\Models\Preposto;
-use Illuminate\Support\Facades\Log;
-use Comprasnet\App\Models\Historico;
-use Illuminate\Support\Facades\Mail;
-use Comprasnet\App\Models\Cronograma;
-use Comprasnet\App\Models\Responsavel;
-use Comprasnet\App\Mail\ErroImportacao;
 use Comprasnet\App\Actions\AdicionarFatura;
 use Comprasnet\App\Actions\AdicionarArquivo;
 use Comprasnet\App\Actions\AdicionarEmpenho;
