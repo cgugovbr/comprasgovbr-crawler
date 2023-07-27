@@ -2,12 +2,12 @@
 
 namespace Comprasnet\App\Console;
 
-use Comprasnet\App\Models\Fatura;
-use Comprasnet\App\Models\Empenho;
 use Comprasnet\App\Models\Arquivo;
 use Comprasnet\App\Models\Preposto;
 use Comprasnet\App\Models\Cronograma;
 use Comprasnet\App\Models\Responsavel;
+use Comprasnet\App\Actions\ExcluirFatura;
+use Comprasnet\App\Actions\ExcluirEmpenho;
 use Comprasnet\App\Actions\AdicionarFatura;
 use Comprasnet\App\Actions\AdicionarArquivo;
 use Comprasnet\App\Actions\AdicionarEmpenho;
@@ -93,7 +93,7 @@ class ComprasnetCommand extends HttpCommand
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
-            Empenho::where('IdContrato', '=', $contrato_id)->delete();
+            ExcluirEmpenho::excluirEmpenhoRelacionadoPorContrato($contrato_id);
 
             foreach ($response as $data) {
                 AdicionarEmpenho::addEmpenhoContrato($data, $contrato_id, $this);
@@ -166,7 +166,7 @@ class ComprasnetCommand extends HttpCommand
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
-            Fatura::where('IdContrato', '=', $contrato_id)->delete();
+            ExcluirFatura::excluirFaturaRelacionadosPorContrato($contrato_id);
 
             foreach ($response as $data) {
                 AdicionarFatura::addFaturaContrato($data, $contrato_id, $this);
