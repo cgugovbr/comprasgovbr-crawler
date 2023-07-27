@@ -30,9 +30,9 @@ class CreateFaturaItensTable extends Migration
 
             $table->bigInteger('IdFatura');
             $table->bigInteger('IdItemContratoOriginal')->nullable();
-            $table->decimal('QtdQuantidadeFaturada', 15, 5)->nullable();
-            $table->decimal('ValValorUnitarioFaturado', 19, 4)->nullable();
-            $table->decimal('ValValorTotalFaturado', 17, 2)->nullable();
+            $table->decimal('QtdFaturada', 15, 5)->nullable();
+            $table->decimal('ValUnitarioFaturado', 19, 4)->nullable();
+            $table->decimal('ValTotalFaturado', 17, 2)->nullable();
 
             $table->index('IdItemContratoOriginal', 'Idx_Fatura_Itens_IdItemContratoOriginal');
         });

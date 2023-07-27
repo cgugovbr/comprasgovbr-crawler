@@ -15,8 +15,8 @@ class FaturaItens extends Model
     protected $fillable = [
         'IdFatura',
         'IdItemContratoOriginal',
-        'QtdQuantidadeFaturada',
-        'ValValorUnitarioFaturado',
-        'ValValorTotalFaturado',
+        'QtdFaturada',
+        'ValUnitarioFaturado',
+        'ValTotalFaturado',
     ];
 }

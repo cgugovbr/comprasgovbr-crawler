@@ -26,9 +26,9 @@ class AdicionarFaturaItens {
                     return [
                         'IdFatura' => $fatura_id,
                         'IdItemContratoOriginal' => (isset($arr['id_item_contrato']) && $arr['id_item_contrato'] <> '') ? $arr['id_item_contrato'] : null,
-                        'QtdQuantidadeFaturada' => (isset($arr['quantidade_faturado']) && $arr['quantidade_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['quantidade_faturado']) : null,
-                        'ValValorUnitarioFaturado' => (isset($arr['valorunitario_faturado']) && $arr['valorunitario_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valorunitario_faturado']) : null,
-                        'ValValorTotalFaturado' => (isset($arr['valortotal_faturado']) && $arr['valortotal_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valortotal_faturado']) : null,
+                        'QtdFaturada' => (isset($arr['quantidade_faturado']) && $arr['quantidade_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['quantidade_faturado']) : null,
+                        'ValUnitarioFaturado' => (isset($arr['valorunitario_faturado']) && $arr['valorunitario_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valorunitario_faturado']) : null,
+                        'ValTotalFaturado' => (isset($arr['valortotal_faturado']) && $arr['valortotal_faturado'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valortotal_faturado']) : null,
                     ];
                 }, $data)
             );
