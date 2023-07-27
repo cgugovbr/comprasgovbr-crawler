@@ -13,7 +13,7 @@ class Empenho extends Model
     protected $table = 'Empenho';
 
     protected $fillable = [
-        'IdEmpenho',
+        'IdEmpenhoOriginal',
         'NumEmpenho',
         'NomCredor',
         'TxtPlanoInterno',

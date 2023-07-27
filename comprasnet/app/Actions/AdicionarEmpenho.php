@@ -27,6 +27,7 @@ class AdicionarEmpenho {
                 ]
             );
 
+            $empenho->IdEmpenhoOriginal = $data['id'];
             $empenho->IdContrato = $contrato_id;
             $empenho->NumEmpenho = $data['numero'];
             $empenho->NomCredor = (isset($data['credor']) && $data['credor'] <> '') ? $data['credor'] : null;
