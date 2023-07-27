@@ -26,13 +26,13 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ComprasnetContratosOrgao::class,
+        ComprasnetFaturasContrato::class,
         ComprasnetEmpenhosContrato::class,
+        ComprasnetArquivosContrato::class,
+        ComprasnetPrepostosContrato::class,
         ComprasnetHistoricoContrato::class,
         ComprasnetCronogramaContrato::class,
-        ComprasnetPrepostosContrato::class,
-        ComprasnetFaturasContrato::class,
         ComprasnetResponsaveisContrato::class,
-        ComprasnetArquivosContrato::class,
     ];
 
 
@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
             'file_path' => $file_path
         ];
 
-        $schedule->command('comprasnet:contratos -e -c -i --inativos')
+        $schedule->command('comprasnet:contratos --all --inativos')
             ->cron('0 1 * * *')
             ->sendOutputTo($file_path)
 //            ->onSuccess(function () use ($data) {
