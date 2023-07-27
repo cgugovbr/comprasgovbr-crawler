@@ -2,6 +2,12 @@
 
 namespace Comprasnet\App\Console;
 
+use Comprasnet\App\Models\Fatura;
+use Comprasnet\App\Models\Empenho;
+use Comprasnet\App\Models\Arquivo;
+use Comprasnet\App\Models\Preposto;
+use Comprasnet\App\Models\Cronograma;
+use Comprasnet\App\Models\Responsavel;
 use Comprasnet\App\Actions\AdicionarFatura;
 use Comprasnet\App\Actions\AdicionarArquivo;
 use Comprasnet\App\Actions\AdicionarEmpenho;
@@ -86,6 +92,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Empenho::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarEmpenho::addEmpenhoContrato($data, $contrato_id, $this);
             }
@@ -102,6 +111,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Cronograma::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarCronograma::addCronogramaContrato($data, $contrato_id, $this);
             }
@@ -134,6 +146,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Preposto::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarPreposto::addPrepostoContrato($data, $contrato_id, $this);
             }
@@ -150,6 +165,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Fatura::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarFatura::addFaturaContrato($data, $contrato_id, $this);
             }
@@ -166,6 +184,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Responsavel::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarResponsavel::addResponsavelContrato($data, $contrato_id, $this);
             }
@@ -182,6 +203,9 @@ class ComprasnetCommand extends HttpCommand
         $response = $this->getData($url, true);
 
         if ($response) {
+            // Exclui dados antigos vinculados contrato
+            Arquivo::where('IdContrato', '=', $contrato_id)->delete();
+
             foreach ($response as $data) {
                 AdicionarArquivo::addArquivoContrato($data, $contrato_id, $this);
             }
