@@ -53,15 +53,33 @@ class AdicionarFatura {
 
             $fatura->save();
 
+            if (static::validaArray($data, 'dados_empenho')) {
+                AdicionarFaturaEmpenho::addFaturaEmpenho($fatura->IdFatura, $data['dados_empenho'], $command);
+            }
+
+            if (static::validaArray($data, 'dados_referencia')) {
+                AdicionarFaturaMesAno::addFaturaMesAno($fatura->IdFatura, $data['dados_referencia'], $command);
+            }
+
+            if (static::validaArray($data, 'dados_item_faturado')) {
+                AdicionarFaturaItens::addFaturaItens($fatura->IdFatura, $data['dados_item_faturado'], $command);
+            }
+
+
             if ($command) {
                 $command->info('Fatura ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar faturas - Número: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            $message = '[ERRO] Erro ao criar/atualizar fatura - Número: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
             Log::error($message);
             Log::error($e);
             Mail::send(new ErroImportacao($message));
         }
+    }
+
+    private static function validaArray($data, $texto): bool
+    {
+        return isset($data[$texto]) && $data[$texto] != null && is_array($data[$texto]) && count($data[$texto]) > 0;
     }
 }
