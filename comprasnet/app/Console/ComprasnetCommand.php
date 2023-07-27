@@ -15,6 +15,7 @@ use Comprasnet\App\Actions\AdicionarPreposto;
 use Comprasnet\App\Actions\AdicionarContrato;
 use Comprasnet\App\Actions\AdicionarHistorico;
 use Comprasnet\App\Actions\AdicionarCronograma;
+use Comprasnet\App\Actions\AdicionarPublicacao;
 use Comprasnet\App\Actions\AdicionarResponsavel;
 
 class ComprasnetCommand extends HttpCommand
@@ -79,6 +80,12 @@ class ComprasnetCommand extends HttpCommand
                     $this->info('');
                     $this->info('Importando Arquivos do contrato ' . $data['id']);
                     $this->getArquivosContrato($contrato->EndLinkArquivos, $data['id']);
+                }
+
+                if (isset($importarArray['importarPublicacao']) && $importarArray['importarPublicacao'] == true) {
+                    $this->info('');
+                    $this->info('Importando Publicações do contrato ' . $data['id']);
+                    $this->getPublicacoesContrato($data['id']);
                 }
 
                 $this->line('[Fim Contrato: ' . $data['id'] . ']--------------------------------------------------');
@@ -212,6 +219,25 @@ class ComprasnetCommand extends HttpCommand
         } else {
             $this->warn('----------------------------------------------------------------------');
             $this->warn('Não existe Arquivo para este contrato.');
+            $this->warn('----------------------------------------------------------------------');
+        }
+    }
+
+    // Busca Publicações
+    public function getPublicacoesContrato($contrato_id)
+    {
+        $tipo = config('comprasnet.contratos.full');
+        $url = $tipo . '/' . $contrato_id . '/publicacoes';
+
+        $response = $this->getData($url);
+
+        if ($response && is_array($response) && count($response) > 0) {
+            foreach ($response as $data) {
+                AdicionarPublicacao::addPublicacaoContrato($data, $contrato_id, $this);
+            }
+        } else {
+            $this->warn('----------------------------------------------------------------------');
+            $this->warn('Não existe Publicação para este contrato.');
             $this->warn('----------------------------------------------------------------------');
         }
     }

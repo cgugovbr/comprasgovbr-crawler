@@ -24,6 +24,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--f|fatura : Importar faturas do contrato}
                             {--r|responsavel : Importar responsáveis do contrato}
                             {--a|arquivo : Importar arquivos do contrato}
+                            {--u|publicacao : Importar publicações do contrato}
                             {--all : Importar todos os dados relacionados do contrato}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
@@ -81,6 +82,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             $importarFatura = $this->option('all') || $this->option('fatura');
             $importarResponsavel = $this->option('all') || $this->option('responsavel');
             $importarArquivo = $this->option('all') || $this->option('arquivo');
+            $importarPublicacao = $this->option('all') || $this->option('publicacao');
             $importarInativos = $this->option('inativos');
             $enviarEmail = $this->option('email');
             $enviarEmailTo = $this->option('email_to');
@@ -98,6 +100,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             $this->line('Fatura: ' . ($importarFatura ? 'sim' : 'não'));
             $this->line('Responsável: ' . ($importarResponsavel ? 'sim' : 'não'));
             $this->line('Arquivo: ' . ($importarArquivo ? 'sim' : 'não'));
+            $this->line('Publicação: ' . ($importarPublicacao ? 'sim' : 'não'));
             $this->line('Inativos: ' . ($importarInativos ? 'sim' : 'não'));
             $this->line('----------------------------------------------------------------------');
             $this->line('');
@@ -113,6 +116,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 'importarFatura' => $importarFatura,
                 'importarResponsavel' => $importarResponsavel,
                 'importarArquivo' => $importarArquivo,
+                'importarPublicacao' => $importarPublicacao,
             ];
 
             $this->getContratos($url, 'ativo', $importarArray);

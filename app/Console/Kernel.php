@@ -15,6 +15,7 @@ use Comprasnet\App\Console\Commands\ComprasnetArquivosContrato;
 use Comprasnet\App\Console\Commands\ComprasnetHistoricoContrato;
 use Comprasnet\App\Console\Commands\ComprasnetPrepostosContrato;
 use Comprasnet\App\Console\Commands\ComprasnetCronogramaContrato;
+use Comprasnet\App\Console\Commands\ComprasnetPublicacoesContrato;
 use Comprasnet\App\Console\Commands\ComprasnetResponsaveisContrato;
 
 class Kernel extends ConsoleKernel
@@ -32,6 +33,7 @@ class Kernel extends ConsoleKernel
         ComprasnetPrepostosContrato::class,
         ComprasnetHistoricoContrato::class,
         ComprasnetCronogramaContrato::class,
+        ComprasnetPublicacoesContrato::class,
         ComprasnetResponsaveisContrato::class,
     ];
 
