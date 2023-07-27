@@ -24,6 +24,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--f|fatura : Importar faturas do contrato}
                             {--r|responsavel : Importar responsáveis do contrato}
                             {--a|arquivo : Importar arquivos do contrato}
+                            {--all : Importar todos os dados relacionados do contrato}
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
                             {--inativos : Importar os Contratos Inativos}
@@ -73,13 +74,13 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
 
             $url = $tipo . $orgao;
 
-            $importarEmpenho = $this->option('empenho');
-            $importarCronograma = $this->option('cronograma');
-            $importarHistorico = $this->option('historico');
-            $importarPreposto = $this->option('preposto');
-            $importarFatura = $this->option('fatura');
-            $importarResponsavel = $this->option('responsavel');
-            $importarArquivo = $this->option('arquivo');
+            $importarEmpenho = $this->option('all') || $this->option('empenho');
+            $importarCronograma = $this->option('all') || $this->option('cronograma');
+            $importarHistorico = $this->option('all') || $this->option('historico');
+            $importarPreposto = $this->option('all') || $this->option('preposto');
+            $importarFatura = $this->option('all') || $this->option('fatura');
+            $importarResponsavel = $this->option('all') || $this->option('responsavel');
+            $importarArquivo = $this->option('all') || $this->option('arquivo');
             $importarInativos = $this->option('inativos');
             $enviarEmail = $this->option('email');
             $enviarEmailTo = $this->option('email_to');
