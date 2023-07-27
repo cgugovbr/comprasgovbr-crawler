@@ -30,7 +30,7 @@ class ErroImportacao extends ComprasnetMailables
      */
     public function build()
     {
-        if ($this->dados) {
+        if ($this->dados && isset($this->dados['file_path'])) {
             return $this->to($this->emails_to)
                 ->markdown('emails.erro.importacao')
                 ->attach($this->dados['file_path']);
