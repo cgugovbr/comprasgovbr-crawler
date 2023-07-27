@@ -56,8 +56,9 @@ class AdicionarFatura {
             if ($command) {
                 $command->info('Fatura ' . $data['id'] . ' do contrato [' . $contrato_id . '] inserido/atualizado com sucesso!');
             }
+
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar faturas - Número Fatura: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            $message = '[ERRO] Erro ao criar/atualizar faturas - Número: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
             Log::error($message);
             Log::error($e);
             Mail::send(new ErroImportacao($message));
