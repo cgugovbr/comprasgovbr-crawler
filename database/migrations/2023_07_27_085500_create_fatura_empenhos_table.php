@@ -33,7 +33,7 @@ class CreateFaturaEmpenhosTable extends Migration
 
             // Chave Primária
             $table->bigInteger('IdFatura');
-            $table->bigInteger('IdEmpenhoOriginal');
+            $table->bigInteger('IdEmpenhoOriginal')->nullable();
 
             $table->index('IdFatura', 'Idx_Fatura_Empenhos_IdFatura');
             $table->index('IdEmpenhoOriginal', 'Idx_Fatura_Empenhos_IdEmpenhoOriginal');

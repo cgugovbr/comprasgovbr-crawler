@@ -25,7 +25,7 @@ class AdicionarFaturaEmpenho {
                 array_map(function($arr) use ($fatura_id) {
                     return [
                         'IdFatura' => $fatura_id,
-                        'IdEmpenhoOriginal' => $arr['id_empenho']
+                        'IdEmpenhoOriginal' => (isset($arr['id_empenho']) && $arr['id_empenho'] <> '') ? $arr['id_empenho'] : null,
                     ];
                 }, $data)
             );
