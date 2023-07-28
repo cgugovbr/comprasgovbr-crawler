@@ -23,7 +23,7 @@ class CreateFaturaMesAnoTable extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->create('Fatura_Mes_Ano', function (Blueprint $table) {
+        $schema->create('FaturaMesAno', function (Blueprint $table) {
 
             // Chave Primária
             $table->bigIncrements('IdFaturaMesAno');
@@ -34,8 +34,8 @@ class CreateFaturaMesAnoTable extends Migration
             $table->decimal('ValValorRef', 17, 2)->nullable();
         });
 
-        Schema::table('Fatura_Mes_Ano', function (Blueprint $table) {
-            $table->foreign('IdFatura', 'FK_Fatura_Mes_Ano_Fatura')->references('IdFatura')->on('Fatura')->onDelete('cascade');
+        Schema::table('FaturaMesAno', function (Blueprint $table) {
+            $table->foreign('IdFatura', 'FK_FaturaMesAno_Fatura')->references('IdFatura')->on('Fatura')->onDelete('cascade');
         });
     }
 
@@ -46,6 +46,6 @@ class CreateFaturaMesAnoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Fatura_Mes_Ano');
+        Schema::dropIfExists('FaturaMesAno');
     }
 }

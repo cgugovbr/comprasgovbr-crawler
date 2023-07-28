@@ -5,7 +5,7 @@ namespace Comprasnet\App\Actions;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
-use Comprasnet\App\Models\FaturaEmpenhos;
+use Comprasnet\App\Models\FaturaEmpenho;
 
 class AdicionarFaturaEmpenho {
 
@@ -19,9 +19,9 @@ class AdicionarFaturaEmpenho {
     public static function addFaturaEmpenho(int $fatura_id, array $data, $command = null): void
     {
         try {
-            FaturaEmpenhos::where('IdFatura', '=', $fatura_id)->delete();
+            FaturaEmpenho::where('IdFatura', '=', $fatura_id)->delete();
 
-            FaturaEmpenhos::insert(
+            FaturaEmpenho::insert(
                 array_map(function($arr) use ($fatura_id) {
                     return [
                         'IdFatura' => $fatura_id,

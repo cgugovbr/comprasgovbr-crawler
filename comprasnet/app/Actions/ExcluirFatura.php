@@ -6,7 +6,7 @@ use Comprasnet\App\Models\Fatura;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
-use Comprasnet\App\Models\FaturaEmpenhos;
+use Comprasnet\App\Models\FaturaEmpenho;
 
 class ExcluirFatura {
 
@@ -23,7 +23,7 @@ class ExcluirFatura {
             $faturas_id = Fatura::where('IdContrato', '=', $contrato_id)
                 ->pluck('IdFatura')
                 ->toArray() ?? [];
-            FaturaEmpenhos::whereIn('IdFatura', $faturas_id)->delete();
+            FaturaEmpenho::whereIn('IdFatura', $faturas_id)->delete();
             Fatura::whereIn('IdFatura', $faturas_id)->delete();
 
         } catch (\Exception $e) {

@@ -23,7 +23,7 @@ class CreateFaturaEmpenhosTable extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->create('Fatura_Empenhos', function (Blueprint $table) {
+        $schema->create('Fatura_Empenho', function (Blueprint $table) {
 
             /**
              * O retorno da API para o vínculo traz o id do empenho, por isso utilizamos o
@@ -32,11 +32,13 @@ class CreateFaturaEmpenhosTable extends Migration
              */
 
             // Chave Primária
+            $table->bigIncrements('IdFaturaEmpenho');
+
             $table->bigInteger('IdFatura');
             $table->bigInteger('IdEmpenhoOriginal')->nullable();
 
-            $table->index('IdFatura', 'Idx_Fatura_Empenhos_IdFatura');
-            $table->index('IdEmpenhoOriginal', 'Idx_Fatura_Empenhos_IdEmpenhoOriginal');
+            $table->index('IdFatura', 'Idx_Fatura_Empenho_IdFatura');
+            $table->index('IdEmpenhoOriginal', 'Idx_Fatura_Empenho_IdEmpenhoOriginal');
         });
     }
 
@@ -47,6 +49,6 @@ class CreateFaturaEmpenhosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Fatura_Empenhos');
+        Schema::dropIfExists('Fatura_Empenho');
     }
 }

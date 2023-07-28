@@ -62,7 +62,7 @@ class AdicionarFatura {
             }
 
             if (static::validaArray($data, 'dados_item_faturado')) {
-                AdicionarFaturaItens::addFaturaItens($fatura->IdFatura, $data['dados_item_faturado'], $command);
+                AdicionarFaturaItem::addFaturaItem($fatura->IdFatura, $data['dados_item_faturado'], $command);
             }
 
 

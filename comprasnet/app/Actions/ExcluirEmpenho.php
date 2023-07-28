@@ -27,7 +27,7 @@ class ExcluirEmpenho {
             // $empenho_original_ids = Empenho::where('IdContrato', '=', $contrato_id)
             //     ->pluck('IdEmpenhoOriginal')
             //     ->toArray() ?? [];
-            // FaturaEmpenhos::whereIn('IdEmpenhoOriginal', $empenho_original_ids)->delete();
+            // FaturaEmpenho::whereIn('IdEmpenhoOriginal', $empenho_original_ids)->delete();
 
             Empenho::where('IdContrato', '=', $contrato_id)->delete();
 

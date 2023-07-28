@@ -4,13 +4,13 @@ namespace Comprasnet\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FaturaItens extends Model
+class FaturaItem extends Model
 {
     public $timestamps = false;
 
-    protected $primaryKey = 'IdFaturaItens';
+    protected $primaryKey = 'IdFaturaItem';
 
-    protected $table = 'Fatura_Itens';
+    protected $table = 'FaturaItem';
 
     protected $fillable = [
         'IdFatura',

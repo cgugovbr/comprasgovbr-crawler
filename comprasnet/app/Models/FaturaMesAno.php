@@ -10,7 +10,7 @@ class FaturaMesAno extends Model
 
     protected $primaryKey = 'IdFaturaMesAno';
 
-    protected $table = 'Fatura_Mes_Ano';
+    protected $table = 'FaturaMesAno';
 
     protected $fillable = [
         'IdFatura',

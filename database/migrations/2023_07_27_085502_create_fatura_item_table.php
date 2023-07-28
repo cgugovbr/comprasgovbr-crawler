@@ -7,7 +7,7 @@ use App\Schemas\Blueprints\CustomBlueprint;
 use App\Schemas\Grammars\CustomGrammar;
 use Illuminate\Support\Facades\DB;
 
-class CreateFaturaItensTable extends Migration
+class CreateFaturaItemTable extends Migration
 {
     /**
      * Run the migrations.
@@ -23,10 +23,10 @@ class CreateFaturaItensTable extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->create('Fatura_Itens', function (Blueprint $table) {
+        $schema->create('FaturaItem', function (Blueprint $table) {
 
             // Chave Primária
-            $table->bigIncrements('IdFaturaItens');
+            $table->bigIncrements('IdFaturaItem');
 
             $table->bigInteger('IdFatura');
             $table->bigInteger('IdItemContratoOriginal')->nullable();
@@ -34,11 +34,11 @@ class CreateFaturaItensTable extends Migration
             $table->decimal('ValUnitarioFaturado', 19, 4)->nullable();
             $table->decimal('ValTotalFaturado', 17, 2)->nullable();
 
-            $table->index('IdItemContratoOriginal', 'Idx_Fatura_Itens_IdItemContratoOriginal');
+            $table->index('IdItemContratoOriginal', 'Idx_FaturaItem_IdItemContratoOriginal');
         });
 
-        Schema::table('Fatura_Itens', function (Blueprint $table) {
-            $table->foreign('IdFatura', 'FK_Fatura_Itens_Fatura')->references('IdFatura')->on('Fatura')->onDelete('cascade');
+        Schema::table('FaturaItem', function (Blueprint $table) {
+            $table->foreign('IdFatura', 'FK_FaturaItem_Fatura')->references('IdFatura')->on('Fatura')->onDelete('cascade');
         });
     }
 
@@ -49,6 +49,6 @@ class CreateFaturaItensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Fatura_Itens');
+        Schema::dropIfExists('FaturaItem');
     }
 }

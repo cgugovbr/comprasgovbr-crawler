@@ -4,10 +4,10 @@ namespace Comprasnet\App\Actions;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Comprasnet\App\Models\FaturaItens;
+use Comprasnet\App\Models\FaturaItem;
 use Comprasnet\App\Mail\ErroImportacao;
 
-class AdicionarFaturaItens {
+class AdicionarFaturaItem {
 
     /**
      * Adiciona vínculo entre Fatura, Mês e Ano
@@ -16,12 +16,12 @@ class AdicionarFaturaItens {
      *
      * @return void
      */
-    public static function addFaturaItens(int $fatura_id, array $data, $command = null): void
+    public static function addFaturaItem(int $fatura_id, array $data, $command = null): void
     {
         try {
-            FaturaItens::where('IdFatura', '=', $fatura_id)->delete();
+            FaturaItem::where('IdFatura', '=', $fatura_id)->delete();
 
-            FaturaItens::insert(
+            FaturaItem::insert(
                 array_map(function($arr) use ($fatura_id) {
                     return [
                         'IdFatura' => $fatura_id,
