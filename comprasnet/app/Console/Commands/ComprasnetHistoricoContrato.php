@@ -60,14 +60,10 @@ class ComprasnetHistoricoContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkHistorico == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe historico vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando o historico do contrato ' . $contrato_id);
-            $this->getHistoricosContrato($contrato->EndLinkHistorico, $contrato_id);
+            $this->getHistoricosContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

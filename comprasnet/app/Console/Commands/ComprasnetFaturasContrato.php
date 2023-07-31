@@ -60,14 +60,10 @@ class ComprasnetFaturasContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkFaturas == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe fatura vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando os faturas do contrato ' . $contrato_id);
-            $this->getFaturasContrato($contrato->EndLinkFaturas, $contrato_id);
+            $this->getFaturasContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

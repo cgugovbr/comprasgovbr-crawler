@@ -15,7 +15,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
      *
      * @var string
      */
-    protected $signature = 'comprasnet:contratos
+    protected $signature = 'comprasnet:contratos:orgao
                             {orgao? : Código do órgão (ex: 25000). Caso não seja informado será considerado a opção COMPRASNET_CODIGO_ORGAO no arquivo .env}
                             {--e|empenho : Importar empenhos do contrato}
                             {--c|cronograma : Importar cronograma do contrato}
@@ -56,7 +56,6 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
     public function handle()
     {
         try {
-            $tipo = config('comprasnet.contratos.orgao');
             $orgao = null !== $this->argument('orgao') ? $this->argument('orgao') : config('comprasnet.orgao');
 
             // Verifica se existe o órgão ou retorna erro
@@ -73,7 +72,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 return;
             }
 
-            $url = $tipo . $orgao;
+            $url = config('comprasnet.contratos.orgao') . $orgao;
 
             $importarEmpenho = $this->option('all') || $this->option('empenho');
             $importarCronograma = $this->option('all') || $this->option('cronograma');
@@ -119,7 +118,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 'importarPublicacao' => $importarPublicacao,
             ];
 
-            $this->getContratos($url, 'ativo', $importarArray);
+            $this->getContratos($url, $importarArray);
 
             if ($importarInativos) {
                 $tipo = config('comprasnet.contratos.inativo_orgao');
@@ -127,7 +126,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 $url = $tipo . $orgao;
 
                 $this->info('Buscando todos os Contratos INATIVOS');
-                $this->getContratos($url, 'inativo', $importarArray);
+                $this->getContratos($url, $importarArray);
             }
 
             if ($enviarEmail) {

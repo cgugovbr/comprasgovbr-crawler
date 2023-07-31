@@ -10,7 +10,7 @@ use Comprasnet\App\Mail\ErroImportacao;
 class AdicionarFaturaItem {
 
     /**
-     * Adiciona vínculo entre Fatura, Mês e Ano
+     * Adiciona Itens da Fatura
      *
      * @param $data
      *

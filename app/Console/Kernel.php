@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
 use Comprasnet\App\Mail\DadosImportados;
 use Illuminate\Console\Scheduling\Schedule;
+use Comprasnet\App\Console\Commands\ComprasnetContrato;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Comprasnet\App\Console\Commands\ComprasnetContratosOrgao;
 use Comprasnet\App\Console\Commands\ComprasnetFaturasContrato;
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        ComprasnetContrato::class,
         ComprasnetContratosOrgao::class,
         ComprasnetFaturasContrato::class,
         ComprasnetEmpenhosContrato::class,

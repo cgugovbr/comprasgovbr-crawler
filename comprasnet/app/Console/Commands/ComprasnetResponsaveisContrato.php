@@ -60,14 +60,10 @@ class ComprasnetResponsaveisContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkResponsaveis == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe responsavel vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando os responsaveis do contrato ' . $contrato_id);
-            $this->getResponsaveisContrato($contrato->EndLinkResponsaveis, $contrato_id);
+            $this->getResponsaveisContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

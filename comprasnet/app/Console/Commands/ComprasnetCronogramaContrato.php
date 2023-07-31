@@ -60,14 +60,10 @@ class ComprasnetCronogramaContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkCronograma == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe cronograma vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando o cronograma do contrato ' . $contrato_id);
-            $this->getCronogramasContrato($contrato->EndLinkCronograma, $contrato_id);
+            $this->getCronogramasContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

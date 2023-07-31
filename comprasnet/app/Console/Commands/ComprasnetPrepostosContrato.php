@@ -60,14 +60,10 @@ class ComprasnetPrepostosContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkPrepostos == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe preposto vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando os prepostos do contrato ' . $contrato_id);
-            $this->getPrepostosContrato($contrato->EndLinkPrepostos, $contrato_id);
+            $this->getPrepostosContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {

@@ -10,14 +10,14 @@ use Comprasnet\App\Mail\ErroImportacao;
 class AdicionarContrato {
 
     /**
-     * Adiciona/Atualiza Contrato de um Contrato
+     * Adiciona/Atualiza um Contrato
      *
      * @param $data
-     * @param $contrato_id
+     * @param $command
      *
      * @return void
      */
-    public static function addContratoContrato($data, $situacaoContrato, $command = null) : Contrato|bool
+    public static function addContrato($data, $command = null) : void
     {
         try {
             $contrato = Contrato::firstOrNew(['IdContrato' => $data['id']]);
@@ -25,8 +25,6 @@ class AdicionarContrato {
             $contrato->IdContrato = $data['id'];
             $contrato->TxtReceitaDespesa = (isset($data['receita_despesa']) && $data['receita_despesa'] <> '') ? $data['receita_despesa'] : null;
             $contrato->NumContrato = (isset($data['numero' ]) && $data['numero'] <> '') ? $data['numero'] : null;
-
-            $contrato->SitContrato = $situacaoContrato;
 
             // Contratante
             $contrato->CodOrgaoContratante = (isset($data['contratante']['orgao']['codigo'])) ? $data['contratante']['orgao']['codigo'] : null;
@@ -41,6 +39,7 @@ class AdicionarContrato {
             $contrato->NomFornecedor = (isset($data['fornecedor']['nome']) && $data['fornecedor']['nome'] <> '') ? $data['fornecedor']['nome'] : null;
 
             $contrato->TpContrato = (isset($data['tipo']) && $data['tipo'] <> '') ? $data['tipo'] : null;
+            $contrato->SitContrato = (isset($data['situacao' ]) && $data['situacao'] <> '') ? $data['situacao'] : null;
             $contrato->CatContrato = (isset($data['categoria']) && $data['categoria'] <> '') ? $data['categoria'] : null;
             $contrato->TxtSubcategoria = (isset($data['subcategoria']) && $data['subcategoria'] <> '') ? $data['subcategoria'] : null;
             $contrato->NomUnidadesRequisitantes = (isset($data['unidades_requisitantes']) && $data['unidades_requisitantes'] <> '') ? $data['unidades_requisitantes'] : null;
@@ -72,14 +71,11 @@ class AdicionarContrato {
                 $command->info('Contrato com id ' . $data['id'] . ' inserido/atualizado com sucesso!');
             }
 
-            return $contrato;
-
         } catch (\Exception $e) {
             $message = '[ERRO] Erro ao criar/atualizar faturas - Número: ' . $data['numero'] . ' | IdContratoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
             Log::error($message);
             Log::error($e);
             Mail::send(new ErroImportacao($message));
-            return false;
         }
     }
 }

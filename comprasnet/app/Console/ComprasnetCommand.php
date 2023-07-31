@@ -17,16 +17,23 @@ use Comprasnet\App\Actions\AdicionarHistorico;
 use Comprasnet\App\Actions\AdicionarCronograma;
 use Comprasnet\App\Actions\AdicionarPublicacao;
 use Comprasnet\App\Actions\AdicionarResponsavel;
+use Comprasnet\App\Actions\AdicionarContratoItem;
 
 class ComprasnetCommand extends HttpCommand
 {
-    public function __construct()
+    public int $timeout = 5;
+
+    public function __construct($timeout = null)
     {
-        HttpCommand::__construct();
+        if ($timeout) {
+            $this->timeout = $timeout;
+        }
+
+        HttpCommand::__construct($this->timeout);
     }
 
     // Busca Contratos
-    public function getContratos($url, $situacaoContrato = 'ativo', $importarArray = [])
+    public function getContratos($url, $importarArray = [])
     {
         $response = $this->getData($url);
 
@@ -34,69 +41,76 @@ class ComprasnetCommand extends HttpCommand
 
             foreach ($response as $data) {
 
+                $contrato_id = $data['id'];
+
                 $this->line('');
                 $this->line('----------------------------------------------------------------------');
-                $this->info('Importando Contrato ' . $data['id']);
+                $this->info('Importando Contrato ' . $contrato_id);
 
-                $contrato = AdicionarContrato::addContratoContrato($data, $situacaoContrato, $this);
+                AdicionarContrato::addContrato($data, $this);
 
-                if (isset($importarArray['importarEmpenho']) && $importarArray['importarEmpenho'] == true && $contrato->EndLinkEmpenhos != '') {
+                $this->line('');
+                $this->info('Importando itens do Contrato ' . $contrato_id);
+                $this->getContratoItens($contrato_id);
+
+                if (isset($importarArray['importarEmpenho']) && $importarArray['importarEmpenho'] == true) {
                     $this->info('');
-                    $this->info('Importando Empenhos do contrato ' . $data['id']);
-                    $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $data['id']);
+                    $this->info('Importando Empenhos do contrato ' . $contrato_id);
+                    $this->getEmpenhosContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarCronograma']) && $importarArray['importarCronograma'] == true && $contrato->EndLinkCronograma != '') {
+                if (isset($importarArray['importarCronograma']) && $importarArray['importarCronograma'] == true) {
                     $this->info('');
-                    $this->info('Importando Cronograma do contrato ' . $data['id']);
-                    $this->getCronogramasContrato($contrato->EndLinkCronograma, $data['id']);
+                    $this->info('Importando Cronograma do contrato ' . $contrato_id);
+                    $this->getCronogramasContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarHistorico']) && $importarArray['importarHistorico'] == true && $contrato->EndLinkHistorico != '') {
+                if (isset($importarArray['importarHistorico']) && $importarArray['importarHistorico'] == true) {
                     $this->info('');
-                    $this->info('Importando Histórico do contrato ' . $data['id']);
-                    $this->getHistoricosContrato($contrato->EndLinkHistorico, $data['id']);
+                    $this->info('Importando Histórico do contrato ' . $contrato_id);
+                    $this->getHistoricosContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarPreposto']) && $importarArray['importarPreposto'] == true && $contrato->EndLinkPrepostos != '') {
+                if (isset($importarArray['importarPreposto']) && $importarArray['importarPreposto'] == true) {
                     $this->info('');
-                    $this->info('Importando Prepostos do contrato ' . $data['id']);
-                    $this->getPrepostosContrato($contrato->EndLinkPrepostos, $data['id']);
+                    $this->info('Importando Prepostos do contrato ' . $contrato_id);
+                    $this->getPrepostosContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarFatura']) && $importarArray['importarFatura'] == true && $contrato->EndLinkFaturas != '') {
+                if (isset($importarArray['importarFatura']) && $importarArray['importarFatura'] == true) {
                     $this->info('');
-                    $this->info('Importando Faturas do contrato ' . $data['id']);
-                    $this->getFaturasContrato($contrato->EndLinkFaturas, $data['id']);
+                    $this->info('Importando Faturas do contrato ' . $contrato_id);
+                    $this->getFaturasContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarResponsavel']) && $importarArray['importarResponsavel'] == true && $contrato->EndLinkResponsaveis != '') {
+                if (isset($importarArray['importarResponsavel']) && $importarArray['importarResponsavel'] == true) {
                     $this->info('');
-                    $this->info('Importando Responsaveis do contrato ' . $data['id']);
-                    $this->getResponsaveisContrato($contrato->EndLinkResponsaveis, $data['id']);
+                    $this->info('Importando Responsaveis do contrato ' . $contrato_id);
+                    $this->getResponsaveisContrato($contrato_id);
                 }
 
-                if (isset($importarArray['importarArquivo']) && $importarArray['importarArquivo'] == true && $contrato->EndLinkArquivos != '') {
+                if (isset($importarArray['importarArquivo']) && $importarArray['importarArquivo'] == true) {
                     $this->info('');
-                    $this->info('Importando Arquivos do contrato ' . $data['id']);
-                    $this->getArquivosContrato($contrato->EndLinkArquivos, $data['id']);
+                    $this->info('Importando Arquivos do contrato ' . $contrato_id);
+                    $this->getArquivosContrato($contrato_id);
                 }
 
                 if (isset($importarArray['importarPublicacao']) && $importarArray['importarPublicacao'] == true) {
                     $this->info('');
-                    $this->info('Importando Publicações do contrato ' . $data['id']);
-                    $this->getPublicacoesContrato($data['id']);
+                    $this->info('Importando Publicações do contrato ' . $contrato_id);
+                    $this->getPublicacoesContrato($contrato_id);
                 }
 
-                $this->line('[Fim Contrato: ' . $data['id'] . ']--------------------------------------------------');
+                $this->line('[Fim Contrato: ' . $contrato_id . ']--------------------------------------------------');
             }
         }
     }
 
     // Busca Empenhos de um Contrato
-    public function getEmpenhosContrato($url, $contrato_id)
+    public function getEmpenhosContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/empenhos';
+        $response = $this->getData($url);
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
@@ -113,10 +127,12 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Cronogramas de um Contrato
-    public function getCronogramasContrato($url, $contrato_id)
+    public function getCronogramasContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
-
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/cronograma';
+$this->info('aqui..');
+        $response = $this->getData($url);
+        $this->info('depois..');
         if ($response) {
             // Exclui dados antigos vinculados contrato
             Cronograma::where('IdContrato', '=', $contrato_id)->delete();
@@ -132,9 +148,11 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Históricos de um Contrato
-    public function getHistoricosContrato($url, $contrato_id)
+    public function getHistoricosContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/historico';
+
+        $response = $this->getData($url);
 
         if ($response) {
             foreach ($response as $data) {
@@ -148,9 +166,11 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Prepostos de um Contrato
-    public function getPrepostosContrato($url, $contrato_id)
+    public function getPrepostosContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/prepostos';
+
+        $response = $this->getData($url);
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
@@ -167,9 +187,11 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Faturas de um Contrato
-    public function getFaturasContrato($url, $contrato_id)
+    public function getFaturasContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/faturas';
+
+        $response = $this->getData($url);
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
@@ -186,9 +208,11 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Responsáveis de um Contrato
-    public function getResponsaveisContrato($url, $contrato_id)
+    public function getResponsaveisContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/responsaveis';
+
+        $response = $this->getData($url);
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
@@ -205,9 +229,11 @@ class ComprasnetCommand extends HttpCommand
     }
 
     // Busca Arquivos de um Contrato
-    public function getArquivosContrato($url, $contrato_id)
+    public function getArquivosContrato($contrato_id)
     {
-        $response = $this->getData($url, true);
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/arquivos';
+
+        $response = $this->getData($url);
 
         if ($response) {
             // Exclui dados antigos vinculados contrato
@@ -226,8 +252,7 @@ class ComprasnetCommand extends HttpCommand
     // Busca Publicações
     public function getPublicacoesContrato($contrato_id)
     {
-        $tipo = config('comprasnet.contratos.full');
-        $url = $tipo . '/' . $contrato_id . '/publicacoes';
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/publicacoes';
 
         $response = $this->getData($url);
 
@@ -238,6 +263,28 @@ class ComprasnetCommand extends HttpCommand
         } else {
             $this->warn('----------------------------------------------------------------------');
             $this->warn('Não existe Publicação para este contrato.');
+            $this->warn('----------------------------------------------------------------------');
+        }
+    }
+
+    // Busca Itens do contrato
+    public function getContratoItens($contrato_id)
+    {
+        $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/itens';
+
+        $response = $this->getData($url);
+
+        dd(
+            is_array($response) && count($response) > 0,
+            $url,
+            $response,
+        );
+
+        if ($response && is_array($response) && count($response) > 0) {
+            AdicionarContratoItem::addContratoItem($contrato_id, $response, $this);
+        } else {
+            $this->warn('----------------------------------------------------------------------');
+            $this->warn('Não existe item para este contrato.');
             $this->warn('----------------------------------------------------------------------');
         }
     }

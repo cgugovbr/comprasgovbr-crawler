@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\GuzzleException;
 use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 // use GuzzleHttp\Exception\RequestException;
-// use GuzzleHttp\Exception\ClientException;
 
 class HttpCommand extends Command
 {
@@ -37,13 +36,24 @@ class HttpCommand extends Command
     protected $access_token;
 
     /**
+     * The request timeout in seconds
+     *
+     * @var integer
+     */
+    protected int $timeout = 6;
+
+    /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($timeout = null)
     {
         parent::__construct();
+
+        If ($timeout) {
+            $this->timeout = $timeout;
+        }
 
         $this->fillGuzzleClient();
     }
@@ -79,22 +89,27 @@ class HttpCommand extends Command
                 $this->line('----------------------------------------------------------------------');
                 return false;
             }
-//        } catch (GuzzleException $e) {
         } catch (ClientException $e) {
-            $this->error('[getData] Erro ao buscar dados...');
-
-            $this->error('getRequest:');
-//            $this->error(Psr7\str($e->getRequest()));
-            $this->error(Psr7\Message::toString($e->getRequest()));
-
-            $this->error('getResponse:');
-            if ($e->hasResponse()) {
-//                $this->error(Psr7\str($e->getResponse()));
-                $this->error(Psr7\Message::toString($e->getResponse()));
-            }
+            $this->error('[getData] [ClientException] Erro ao buscar dados...');
 
             $this->error('fullError:');
             $this->error($e);
+
+            $this->error('getRequest:');
+            $this->error(Psr7\Message::toString($e->getRequest()));
+
+            $this->error('getResponse:');
+            $this->error(Psr7\Message::toString($e->getResponse()));
+
+            $this->line('----------------------------------------------------------------------');
+        } catch (GuzzleException $e) {
+            $this->error('[getData] [GuzzleException] Erro ao buscar dados...');
+
+            $this->error('fullError:');
+            $this->error($e);
+
+            $this->error('getRequest:');
+            $this->error(Psr7\Message::toString($e->getRequest()));
 
             $this->line('----------------------------------------------------------------------');
         }
@@ -110,17 +125,28 @@ class HttpCommand extends Command
             if ($response && is_array($response) && isset($response['id'])) {
                 return true;
             }
-        } catch (GuzzleException $e) {
-            $this->error('[accessTokenIsValid] Erro ao verificar token...');
+        } catch (ClientException $e) {
+            $this->error('[accessTokenIsValid] [ClientException] Erro ao verificar token...');
+
+            $this->error('fullError:');
+            $this->error($e);
+
             $this->error('getRequest:');
             $this->error(Psr7\Message::toString($e->getRequest()));
 
-            if ($e->hasResponse()) {
-                $this->error('getResponse:');
-                $this->error(Psr7\Message::toString($e->getResponse()));
-            }
+            $this->error('getResponse:');
+            $this->error(Psr7\Message::toString($e->getResponse()));
+
+            $this->line('----------------------------------------------------------------------');
+        } catch (GuzzleException $e) {
+            $this->error('[accessTokenIsValid] [GuzzleException] Erro ao verificar token...');
+
             $this->error('fullError:');
             $this->error($e);
+
+            $this->error('getRequest:');
+            $this->error(Psr7\Message::toString($e->getRequest()));
+
             $this->line('----------------------------------------------------------------------');
         }
 
@@ -172,17 +198,28 @@ class HttpCommand extends Command
                 $this->comment('Access token:');
                 $this->comment($this->access_token);
             }
-        } catch (GuzzleException $e) {
-            $this->error('[refreshAccessToken] Erro ao buscar dados...');
+        } catch (ClientException $e) {
+            $this->error('[refreshAccessToken] [ClientException] Erro ao renovar token...');
+
+            $this->error('fullError:');
+            $this->error($e);
+
             $this->error('getRequest:');
             $this->error(Psr7\Message::toString($e->getRequest()));
 
-            if ($e->hasResponse()) {
-                $this->error('getResponse:');
-                $this->error(Psr7\Message::toString($e->getResponse()));
-            }
+            $this->error('getResponse:');
+            $this->error(Psr7\Message::toString($e->getResponse()));
+
+            $this->line('----------------------------------------------------------------------');
+        } catch (GuzzleException $e) {
+            $this->error('[refreshAccessToken] [GuzzleException] Erro ao renovar token...');
+
             $this->error('fullError:');
             $this->error($e);
+
+            $this->error('getRequest:');
+            $this->error(Psr7\Message::toString($e->getRequest()));
+
             $this->line('----------------------------------------------------------------------');
         }
     }
@@ -203,6 +240,7 @@ class HttpCommand extends Command
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
 
 //        curl_setopt($curl, CURLOPT_HTTPHEADER, [
 //            "Content-Type: application/json",
@@ -217,7 +255,11 @@ class HttpCommand extends Command
                 $this->access_token = $json_response['access_token'];
                 $this->info('Token gerado com sucesso!');
 //                $this->info($this->access_token);
+            } else {
+                $this->info('Token NÃO GERADO...');
             }
+        } else {
+            $this->info('[ERRO] generateNewAccessToken - HTTPCode: ' . $httpcode);
         }
     }
 
@@ -232,7 +274,7 @@ class HttpCommand extends Command
             'headers' => [
                 'Authorization' => "Bearer " . $this->access_token
             ],
-//            'timeout' => 2
+           'timeout' => $this->timeout ?? 2
         ]);
     }
 }

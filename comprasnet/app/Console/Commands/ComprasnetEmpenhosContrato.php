@@ -60,14 +60,10 @@ class ComprasnetEmpenhosContrato extends ComprasnetCommand
             $this->warn('');
             $this->warn('ou verifique o código do contrato e tente novamente.');
             $this->warn('----------------------------------------------------------------------');
-        } elseif ($contrato->EndLinkEmpenhos == '') {
-            $this->info('----------------------------------------------------------------------');
-            $this->info('Não existe empenho vinculado à este contrato.');
-            $this->info('----------------------------------------------------------------------');
         } else {
             $this->line('----------------------------------------------------------------------');
             $this->line('Importando os empenhos do contrato ' . $contrato_id);
-            $this->getEmpenhosContrato($contrato->EndLinkEmpenhos, $contrato_id);
+            $this->getEmpenhosContrato($contrato_id);
             $this->line('----------------------------------------------------------------------');
 
             if ($enviarEmail) {
