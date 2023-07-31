@@ -35,17 +35,20 @@ class AdicionarContratoItem {
                         'ValUnitario' => (isset($arr['valorunitario']) && $arr['valorunitario'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valorunitario']) : null,
                         'ValTotal' => (isset($arr['valortotal']) && $arr['valortotal'] <> '') ? str_replace(['.', ','], ['', '.'], $arr['valortotal']) : null,
                         'NumItemCompra' => (isset($arr['numero_item_compra']) && $arr['numero_item_compra'] <> '') ? $arr['numero_item_compra'] : null,
-                        'datInicioItem' => (isset($arr['data_inicio_item']) && $arr['data_inicio_item'] <> '') ? $arr['data_inicio_item'] : null,
+                        'datInicioItem' => (is_array($arr['data_inicio_item']) && isset($arr['data_inicio_item']['date']) && $arr['data_inicio_item']['date'] <> '') ? $arr['data_inicio_item']['date'] : null,
                     ];
                 }, $data)
             );
 
             if ($command) {
-                $command->info('Itens adicionados para o contrato: ' . $contrato_id);
+                $command->info('Itens adicionados para o contrato: ' . $contrato_id . ' com sucesso!');
             }
 
         } catch (\Exception $e) {
             $message = '[ERRO] Erro ao adicionar itens do contrato: ' . $contrato_id;
+            if ($command) {
+                $command->error($message);
+            }
             Log::error($message);
             Log::error($e);
             Mail::send(new ErroImportacao($message));

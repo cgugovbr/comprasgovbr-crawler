@@ -274,17 +274,11 @@ $this->info('aqui..');
 
         $response = $this->getData($url);
 
-        dd(
-            is_array($response) && count($response) > 0,
-            $url,
-            $response,
-        );
-
         if ($response && is_array($response) && count($response) > 0) {
             AdicionarContratoItem::addContratoItem($contrato_id, $response, $this);
         } else {
             $this->warn('----------------------------------------------------------------------');
-            $this->warn('Não existe item para este contrato.');
+            $this->warn('Não existe item para este contrato: ' . $contrato_id);
             $this->warn('----------------------------------------------------------------------');
         }
     }
