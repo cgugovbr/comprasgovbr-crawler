@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
             'file_path' => $file_path
         ];
 
-        $schedule->command('comprasnet:contratos --all --inativos')
+        $schedule->command('comprasnet:contratos:orgao --all --inativos')
             ->cron('0 1 * * *')
             ->sendOutputTo($file_path)
 //            ->onSuccess(function () use ($data) {
