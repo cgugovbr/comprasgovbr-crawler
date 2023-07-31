@@ -148,8 +148,8 @@ chown -R www-data:www-data /var/www/html/storage/
 chown -R www-data:www-data /var/www/html/public/storage
 
 # Cria/atualiza tabelas no banco de dados
-#date +'%Y-%m-%d %H:%M:%S' && echo "Migrando tabelas"
-#php artisan migrate --force
+date +'%Y-%m-%d %H:%M:%S' && echo "Migrando tabelas"
+php artisan migrate --force
 
 # Popula tabelas
 # date +'%Y-%m-%d %H:%M:%S' && echo "Populando tabelas"
