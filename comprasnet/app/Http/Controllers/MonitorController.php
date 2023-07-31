@@ -24,7 +24,7 @@ class MonitorController extends Controller
 
         try {
             // Verifica Banco de Dados
-            Contrato::limit(1)->first();
+            Contrato::select('IdContrato')->limit(1)->first();
             $db = true;
         } catch (\Exception $e) {
             $db = false;
