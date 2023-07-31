@@ -79,3 +79,43 @@ Acesse o browser e verifique se a aplicação está configurada corretamente ace
 
 http://localhost
 
+
+
+
+
+-- versão hom
+
+## Docker
+
+Caso você utilize containers (Docker ou Kubernetes) existe um arquivo na raiz chamado
+Dockerfile que poderá ser utilizado para criar o cotnainer com todas as bibliotecas
+necessárias para rodar o sistema. Lembrando que neste caso temos algumas bibliotecas
+para o SQL Server, que poderá ser removida caso utilize outro banco de dados.
+O script de inicialização (_entrypoint.sh_) possui diversas funções dentre elas
+utilizando _secrets_ do Kubernetes para montar o arquivo de configuração '.env',
+configura o crontab automaticamente, rodar a migração dos dados e
+fazer cache das configurações do sistema. Caso não esteja utilizando Docker,
+pode ser interessante verificar as configurações feitas pelo script para
+reutilizar em seu ambiente de produção.
+
+## Desenvolvimento
+
+Caso deseja contruibuir com o desenvolvimento, para subir o ambiente local será necesário ter o Docker instalado
+e após clonar a aplicação rodar os seguintes comandos:
+
+### Instalar dependências:
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php80-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+### Iniciar a aplicação localmente
+```bash
+sail up
+```
+
+Qualquer dúvida sobre o Sail acesse [https://laravel.com/docs/sail](https://laravel.com/docs/sail)
