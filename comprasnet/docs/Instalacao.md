@@ -9,7 +9,7 @@ simplificar os _migrations_.
 1. Para utilizar essa aplicação é necessário possuir um usuário e senha
 com autorização para utilização da API.
 
-2. Requisitos do framework verificar (site do Laravel)[https://laravel.com/docs/deployment#server-requirements].
+2. Requisitos do framework verificar [site do Laravel](https://laravel.com/docs/deployment#server-requirements).
 
 ## Primeiros passos
 
