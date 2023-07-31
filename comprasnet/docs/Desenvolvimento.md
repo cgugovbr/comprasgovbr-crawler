@@ -3,12 +3,15 @@
 Para começar a desenvolvier neste projeto indicamos ter instalado docker em sua máquina. 
 Se for windows utilizar a versão docker para o wsl.
 
+Utilizamos o Laravel Sail para maiores informações acesse a documentação do Sail em [https://laravel.com/docs/sail](https://laravel.com/docs/sail).
+
+
 ## Primeiros passos
 
 1. Clonar a aplicação
 
 ```bash
-git clone git@github.com:cgugovbr/comprasnet-crawler.git
+git clone git@github.com:cgugovbr/comprasgovbr-crawler.git
 ```
 
 2. Instalar dependências iniciais
@@ -83,12 +86,10 @@ http://localhost
 
 
 
--- versão hom
-
 ## Docker
 
 Caso você utilize containers (Docker ou Kubernetes) existe um arquivo na raiz chamado
-Dockerfile que poderá ser utilizado para criar o cotnainer com todas as bibliotecas
+Dockerfile que poderá ser utilizado para criar o container com todas as bibliotecas
 necessárias para rodar o sistema. Lembrando que neste caso temos algumas bibliotecas
 para o SQL Server, que poderá ser removida caso utilize outro banco de dados.
 O script de inicialização (_entrypoint.sh_) possui diversas funções dentre elas
@@ -98,24 +99,4 @@ fazer cache das configurações do sistema. Caso não esteja utilizando Docker,
 pode ser interessante verificar as configurações feitas pelo script para
 reutilizar em seu ambiente de produção.
 
-## Desenvolvimento
 
-Caso deseja contruibuir com o desenvolvimento, para subir o ambiente local será necesário ter o Docker instalado
-e após clonar a aplicação rodar os seguintes comandos:
-
-### Instalar dependências:
-```bash
-docker run --rm \
-    -u "$(id -u):$(id -g)" \
-    -v $(pwd):/var/www/html \
-    -w /var/www/html \
-    laravelsail/php80-composer:latest \
-    composer install --ignore-platform-reqs
-```
-
-### Iniciar a aplicação localmente
-```bash
-sail up
-```
-
-Qualquer dúvida sobre o Sail acesse [https://laravel.com/docs/sail](https://laravel.com/docs/sail)
