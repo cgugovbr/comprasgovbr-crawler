@@ -3,7 +3,6 @@
 namespace Comprasnet\App\Actions;
 
 use Comprasnet\App\Models\Contrato;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
@@ -67,7 +66,7 @@ class AdicionarContrato extends ActionsCommon {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar faturas - Número: ' . $data['numero'] . ' | IdContratoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            $message = '[ERRO] Erro ao criar/atualizar contrasto - IdContrato' . $data['id'];
             Log::error($message);
             Log::error($e);
             Mail::send(new ErroImportacao($message));
