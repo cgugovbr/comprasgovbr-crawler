@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Comprasnet\App\Http\Controllers\MonitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/monitoramento/status', function () {
-    return 'Tudo certo!';
-});
+Route::get('/monitoramento/status', [MonitorController::class, 'status']);
