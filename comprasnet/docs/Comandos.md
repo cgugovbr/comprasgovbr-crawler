@@ -23,10 +23,16 @@ php artisan
 
 [...]
 comprasnet
-  comprasnet:contratos   Importar TODOS os contratos de um órgão
-  comprasnet:cronograma  Importar o Cronograma de um Contrato
-  comprasnet:empenhos    Importar os Empenhos de um Contrato
-  comprasnet:historico   Importar o Historico de um Contrato
+  comprasnet:arquivos         Importar os Arquivos de um Contrato
+  comprasnet:contrato         Importar um contrato e seus dados relacionados
+  comprasnet:contratos:orgao  Importar TODOS os contratos de um órgão
+  comprasnet:cronograma       Importar o Cronograma de um Contrato
+  comprasnet:empenhos         Importar os Empenhos de um Contrato
+  comprasnet:faturas          Importar os Faturas de um Contrato
+  comprasnet:historico        Importar o Historico de um Contrato
+  comprasnet:prepostos        Importar os Prepostos de um Contrato
+  comprasnet:publicacoes      Importar Publicações de um Contrato
+  comprasnet:responsaveis     Importar os Responsaveis de um Contrato
 ```
 
 Ou para verificar a funcionalidade e opções de um comando digite:

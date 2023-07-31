@@ -118,7 +118,7 @@ Acesse o arquivo 'app\Console\Kernel.php' e edite a seguinte linha:
     {
         [...]
 
-        $schedule->command('comprasnet:contratos -e -c -i --inativos')
+        $schedule->command('comprasnet:contratos:orgao --all --inativos')
             // Edite esta linha abaixo com as configurações desejadas
             ->cron('0 5 * * *')
             ->sendOutputTo($file_path)
