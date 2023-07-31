@@ -1,4 +1,4 @@
-<div align="center"><img src="comprasnet/imagens/contratos_logo.png" width="720" height="240"></div>
+<div align="center"><img src="comprasnet/imagens/contratos_logo.png" height="240"></div>
 
 # ComprasGovBr-Crawler
 

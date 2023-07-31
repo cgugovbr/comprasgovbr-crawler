@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ env('APP_NAME') ?? 'ComprasNet-Crawler' }}</title>
+        <title>{{ env('APP_NAME') ?? 'ComprasGovBr-Crawler' }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex justify-center pt-8 sm:pt-0">
-                    <img class="h-20 w-auto sm:h-20" src="images/comprasgovbr.png" alt="Compras.gov.br" style="height: 15rem">
+                    <img class="h-20 w-auto sm:h-20" src="/images/contratos_logo.png" alt="compras.gov.br" style="height: 15rem">
                 </div>
 
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
