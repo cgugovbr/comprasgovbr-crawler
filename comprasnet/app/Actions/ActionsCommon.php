@@ -17,7 +17,7 @@ class ActionsCommon {
     {
         foreach ($keys as $key) {
             $array_dot = Arr::dot($array);
-            if (isset($array_dot[$key]) && is_string($array_dot[$key]) && $array_dot[$key] <> '') {
+            if (isset($array_dot[$key]) && !is_array($array_dot[$key]) && $array_dot[$key] <> '') {
                 return $array_dot[$key];
             }
         }
