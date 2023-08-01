@@ -130,7 +130,7 @@ class ComprasnetCommand extends HttpCommand
     public function getCronogramasContrato($contrato_id)
     {
         $url = config('comprasnet.contratos.contrato') . '/' . $contrato_id . '/cronograma';
-$this->info('aqui..');
+
         $response = $this->getData($url);
         $this->info('depois..');
         if ($response) {
