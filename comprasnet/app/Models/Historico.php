@@ -48,6 +48,7 @@ class Historico extends Model
         'MesReferenciaRetroativoATE',
         'AnoReferenciaRetroativoATE',
         'DatVencimentorRetroativo',
-        'ValRetroativo'
+        'ValRetroativo',
+        'TxtFundamentoLegalAditivo'
     ];
 }

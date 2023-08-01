@@ -42,6 +42,13 @@ class Contrato extends Model
         'EndLinkCronograma',
         'EndLinkPrepostos',
         'DthCriadoEm',
-        'DthAtualizadoEm'
+        'DthAtualizadoEm',
+        'TpSubtipo',
+        'SitProrrogavel',
+        'TxtJustificativaInativo',
+        'TxtAmparoLegal',
+        'TxtFundamentoLegal',
+        'TxtSisOriLicitacao',
+        'CodUnidadeCompra',
     ];
 }

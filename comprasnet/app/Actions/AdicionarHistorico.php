@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Models\Historico;
 use Comprasnet\App\Mail\ErroImportacao;
 
-class AdicionarHistorico {
+class AdicionarHistorico extends ActionsCommon {
 
     /**
      * Adiciona/Atualiza Responsável de um Contrato
@@ -31,45 +31,47 @@ class AdicionarHistorico {
 
             $historico->IdContrato = $contrato_id;
 
-            $historico->TxtReceitaDespesa = (isset($data['receita_despesa']) && $data['receita_despesa'] <> '') ? $data['receita_despesa'] : null;
-            $historico->NumContrato = (isset($data['numero']) && $data['numero'] <> '') ? $data['numero'] : null;
-            $historico->ObsHistorico = (isset($data['observacao']) && $data['observacao'] <> '') ? $data['observacao'] : null;
-            $historico->CodUG = (isset($data['ug']) && $data['ug'] <> '') ? $data['ug'] : null;
+            $historico->TxtReceitaDespesa = ActionsCommon::validaDataArray($data,'receita_despesa');
+            $historico->NumContrato = ActionsCommon::validaDataArray($data,'numero');
+            $historico->ObsHistorico = ActionsCommon::validaDataArray($data,'observacao');
+            $historico->CodUG = ActionsCommon::validaDataArray($data,'ug');
 
             // Fornecedor
-            $historico->TpFornecedor = (isset($data['fornecedor']['tipo']) && $data['fornecedor']['tipo'] <> '') ? $data['fornecedor']['tipo'] : null;
-            $historico->NumCnpjCpf = (isset($data['fornecedor']['cnpj_cpf_idgener']) && $data['fornecedor']['cnpj_cpf_idgener'] <> '') ? str_replace(['.', '/', '-'], ['', '', ''], $data['fornecedor']['cnpj_cpf_idgener']) : null;
-            $historico->NomFornecedor = (isset($data['fornecedor']['nome']) && $data['fornecedor']['nome'] <> '') ? $data['fornecedor']['nome'] : null;
+            $historico->TpFornecedor = ActionsCommon::validaDataArray($data,'fornecedor.tipo');
+            $historico->NumCnpjCpf = str_replace(['.', '/', '-'], ['', '', ''], ActionsCommon::validaDataArray($data,'fornecedor.cnpj_cpf_idgener'));
+            $historico->NomFornecedor = ActionsCommon::validaDataArray($data,'fornecedor.nome');
 
-            $historico->TpContrato = (isset($data['tipo']) && $data['tipo'] <> '') ? $data['tipo'] : null;
-            $historico->CatContrato = (isset($data['categoria']) && $data['categoria'] <> '') ? $data['categoria'] : null;
-            $historico->NumProcesso = (isset($data['processo']) && $data['processo'] <> '') ? $data['processo'] : null;
-            $historico->DescObjeto = (isset($data['objeto']) && $data['objeto'] <> '') ? $data['objeto'] : null;
-            $historico->TxtInformacaoComplementar = (isset($data['informacao_complementar']) && $data['informacao_complementar'] <> '') ? $data['informacao_complementar'] : null;
-            $historico->DescModalidade = (isset($data['modalidade']) && $data['modalidade'] <> '') ? $data['modalidade'] : null;
-            $historico->NumLicitacao = (isset($data['licitacao_numero']) && $data['licitacao_numero'] <> '') ? $data['licitacao_numero'] : null;
-            $historico->DatAssinatura = (isset($data['data_assinatura']) && $data['data_assinatura'] <> '') ? $data['data_assinatura'] : null;
-            $historico->DatPublicacao = (isset($data['data_publicacao']) && $data['data_publicacao'] <> '') ? $data['data_publicacao'] : null;
-            $historico->DatVigenciaInicio = (isset($data['data_publicacao']) && $data['data_publicacao'] <> '') ? $data['data_publicacao'] : null;
-            $historico->DatVigenciaFim = (isset($data['vigencia_fim']) && $data['vigencia_fim'] <> '') ? $data['vigencia_fim'] : null;
-            $historico->ValInicial = (isset($data['valor_inicial']) && $data['valor_inicial'] <> '') ? str_replace(['.', ','], ['', '.'], $data['valor_inicial']) : null;
-            $historico->ValGlobal = (isset($data['valor_global']) && $data['valor_global'] <> '') ? str_replace(['.', ','], ['', '.'], $data['valor_global']) : null;
-            $historico->NumParcelas = (isset($data['num_parcelas']) && $data['num_parcelas'] <> '') ? $data['num_parcelas'] : null;
-            $historico->ValParcela = (isset($data['valor_parcela']) && $data['valor_parcela'] <> '') ? str_replace(['.', ','], ['', '.'], $data['valor_parcela']) : null;
+            $historico->TpContrato = ActionsCommon::validaDataArray($data,'tipo');
+            $historico->CatContrato = ActionsCommon::validaDataArray($data,'categoria');
+            $historico->NumProcesso = ActionsCommon::validaDataArray($data,'processo');
+            $historico->DescObjeto = ActionsCommon::validaDataArray($data,'objeto');
+            $historico->TxtInformacaoComplementar = ActionsCommon::validaDataArray($data,'informacao_complementar');
+            $historico->DescModalidade = ActionsCommon::validaDataArray($data,'modalidade');
+            $historico->NumLicitacao = ActionsCommon::validaDataArray($data,'licitacao_numero');
+            $historico->DatAssinatura = ActionsCommon::validaDataArray($data,'data_assinatura');
+            $historico->DatPublicacao = ActionsCommon::validaDataArray($data,'data_publicacao');
+            $historico->DatVigenciaInicio = ActionsCommon::validaDataArray($data,'vigencia_inicio');
+            $historico->DatVigenciaFim = ActionsCommon::validaDataArray($data,'vigencia_fim');
+            $historico->ValInicial = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'valor_inicial'));
+            $historico->ValGlobal = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'valor_global'));
+            $historico->NumParcelas = intval(ActionsCommon::validaDataArray($data,'num_parcelas'));
+            $historico->ValParcela = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'valor_parcela'));
 
-            $historico->ValGlobalNovo = (isset($data['novo_valor_global']) && $data['novo_valor_global'] <> '') ? str_replace(['.', ','], ['', '.'], $data['novo_valor_global']) : null;
-            $historico->NumParcelasNovo = (isset($data['novo_num_parcelas']) && $data['novo_num_parcelas'] <> '') ? $data['novo_num_parcelas'] : null;
-            $historico->ValParcelaNovo = (isset($data['novo_valor_parcela']) && $data['novo_valor_parcela'] <> '') ? str_replace(['.', ','], ['', '.'], $data['novo_valor_parcela']) : null;
-            $historico->DatInicioNovoValor = (isset($data['data_inicio_novo_valor']) && $data['data_inicio_novo_valor'] <> '') ? $data['data_inicio_novo_valor'] : null;
+            $historico->ValGlobalNovo = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'novo_valor_global'));
+            $historico->NumParcelasNovo = ActionsCommon::validaDataArray($data,'novo_num_parcelas');
+            $historico->ValParcelaNovo = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'novo_valor_parcela'));
+            $historico->DatInicioNovoValor = ActionsCommon::validaDataArray($data,'data_inicio_novo_valor');
 
-            $historico->FlgRetroativo = (isset($data['retroativo']) && $data['retroativo'] <> '') ? $data['retroativo'] : null;
+            $historico->FlgRetroativo = ActionsCommon::validaDataArray($data,'retroativo');
 
-            $historico->MesReferenciaRetroativoDE = (isset($data['retroativo_mesref_de']) && $data['retroativo_mesref_de'] <> '') ? $data['retroativo_mesref_de'] : null;
-            $historico->AnoReferenciaRetroativoDE = (isset($data['retroativo_anoref_de']) && $data['retroativo_anoref_de'] <> '') ? $data['retroativo_anoref_de'] : null;
-            $historico->MesReferenciaRetroativoATE = (isset($data['retroativo_mesref_ate']) && $data['retroativo_mesref_ate'] <> '') ? $data['retroativo_mesref_ate'] : null;
-            $historico->AnoReferenciaRetroativoATE = (isset($data['retroativo_anoref_ate']) && $data['retroativo_anoref_ate'] <> '') ? $data['retroativo_anoref_ate'] : null;
-            $historico->DatVencimentorRetroativo = (isset($data['retroativo_vencimento']) && $data['retroativo_vencimento'] <> '') ? $data['retroativo_vencimento'] : null;
-            $historico->ValRetroativo = (isset($data['retroativo_valor']) && $data['retroativo_valor'] <> '') ? str_replace(['.', ','], ['', '.'], $data['retroativo_valor']) : null;
+            $historico->MesReferenciaRetroativoDE = ActionsCommon::validaDataArray($data,'retroativo_mesref_de');
+            $historico->AnoReferenciaRetroativoDE = ActionsCommon::validaDataArray($data,'retroativo_anoref_de');
+            $historico->MesReferenciaRetroativoATE = ActionsCommon::validaDataArray($data,'retroativo_mesref_ate');
+            $historico->AnoReferenciaRetroativoATE = ActionsCommon::validaDataArray($data,'retroativo_anoref_ate');
+            $historico->DatVencimentorRetroativo = ActionsCommon::validaDataArray($data,'retroativo_vencimento');
+            $historico->ValRetroativo = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'retroativo_valor'));
+
+            $historico->TxtFundamentoLegalAditivo = ActionsCommon::validaDataArray($data,'fundamento_legal_aditivo');
 
             $historico->save();
 

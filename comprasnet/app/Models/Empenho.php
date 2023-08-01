@@ -25,6 +25,12 @@ class Empenho extends Model
         'ValRPInscrito',
         'ValRPALiquidar',
         'ValRPLiquidado',
-        'ValRPPago'
+        'ValRPPago',
+        'CodUnidadeGestora',
+        'NumGestao',
+        'DatEmissao',
+        'TxtInformacaoComplementar',
+        'TxtSisOrigem',
+        'TxtFonteRecurso'
     ];
 }

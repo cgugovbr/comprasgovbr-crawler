@@ -41,7 +41,7 @@ class DropColumnsContratoTable extends Migration
         });
 
         $schema->table('Contrato', function (Blueprint $table) {
-            if (!Schema::hasColumns('Contrato', ['EndLinkHistorico', 'End/LinkEmpenhos', 'EndLinkCronograma'])) {
+            if (!Schema::hasColumns('Contrato', ['EndLinkHistorico', 'EndLinkEmpenhos', 'EndLinkCronograma'])) {
                 $table->varChar('EndLinkHistorico')->nullable();
                 $table->varChar('EndLinkEmpenhos')->nullable();
                 $table->varChar('EndLinkCronograma')->nullable();

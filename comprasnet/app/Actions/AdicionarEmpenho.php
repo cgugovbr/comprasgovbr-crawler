@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
 
-class AdicionarEmpenho {
+class AdicionarEmpenho extends ActionsCommon {
 
     /**
      * Adiciona/Atualiza Empenho de um Contrato
@@ -30,17 +30,24 @@ class AdicionarEmpenho {
             $empenho->IdEmpenhoOriginal = $data['id'];
             $empenho->IdContrato = $contrato_id;
             $empenho->NumEmpenho = $data['numero'];
-            $empenho->NomCredor = (isset($data['credor']) && $data['credor'] <> '') ? $data['credor'] : null;
-            $empenho->TxtPlanoInterno = (isset($data['planointerno']) && $data['planointerno'] <> '') ? $data['planointerno'] : null;
-            $empenho->DescNaturezaDepesa = (isset($data['naturezadespesa']) && $data['naturezadespesa'] <> '') ? $data['naturezadespesa'] : null;
-            $empenho->ValEmpenhado = (isset($data['empenhado']) && $data['empenhado'] <> '') ? str_replace(['.', ','], ['', '.'], $data['empenhado']) : null;
-            $empenho->ValALiquidar = (isset($data['aliquidar']) && $data['aliquidar'] <> '') ? str_replace(['.', ','], ['', '.'], $data['aliquidar']) : null;
-            $empenho->ValLiquidado = (isset($data['liquidado']) && $data['liquidado'] <> '') ? str_replace(['.', ','], ['', '.'], $data['liquidado']) : null;
-            $empenho->ValPago = (isset($data['pago']) && $data['pago'] <> '') ? str_replace(['.', ','], ['', '.'], $data['pago']) : null;
-            $empenho->ValRPInscrito = (isset($data['rpinscrito']) && $data['rpinscrito'] <> '') ? str_replace(['.', ','], ['', '.'], $data['rpinscrito']) : null;
-            $empenho->ValRPALiquidar = (isset($data['rpaliquidar']) && $data['rpaliquidar'] <> '') ? str_replace(['.', ','], ['', '.'], $data['rpaliquidar']) : null;
-            $empenho->ValRPLiquidado = (isset($data['rpliquidado']) && $data['rpliquidado'] <> '') ? str_replace(['.', ','], ['', '.'], $data['rpliquidado']) : null;
-            $empenho->ValRPPago = (isset($data['rppago']) && $data['rppago'] <> '') ? str_replace(['.', ','], ['', '.'], $data['rppago']) : null;
+            $empenho->NomCredor = ActionsCommon::validaDataArray($data, 'credor');
+            $empenho->TxtPlanoInterno = ActionsCommon::validaDataArray($data, 'planointerno');
+            $empenho->DescNaturezaDepesa = ActionsCommon::validaDataArray($data, 'naturezadespesa');
+            $empenho->ValEmpenhado = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'empenhado'));
+            $empenho->ValALiquidar = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'aliquidar'));
+            $empenho->ValLiquidado = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'liquidado'));
+            $empenho->ValPago = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'pago'));
+            $empenho->ValRPInscrito = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rpinscrito'));
+            $empenho->ValRPALiquidar = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rpaliquidar'));
+            $empenho->ValRPLiquidado = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rpliquidado'));
+            $empenho->ValRPPago = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rppago'));
+
+            $empenho->CodUnidadeGestora = ActionsCommon::validaDataArray($data, 'unidade_gestora');;
+            $empenho->NumGestao = ActionsCommon::validaDataArray($data, 'gestao');;
+            $empenho->DatEmissao = ActionsCommon::validaDataArray($data, 'data_emissao');;
+            $empenho->TxtInformacaoComplementar = ActionsCommon::validaDataArray($data, 'informacao_complementar');;
+            $empenho->TxtSisOrigem = ActionsCommon::validaDataArray($data, 'sistema_origem');;
+            $empenho->TxtFonteRecurso = ActionsCommon::validaDataArray($data, 'fonte_recurso');;
 
             $empenho->save();
 

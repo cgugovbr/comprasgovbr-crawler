@@ -58,6 +58,13 @@ class AdicionarContrato extends ActionsCommon {
             $contrato->NumParcelas = ActionsCommon::validaDataArray($data,'num_parcelas');
             $contrato->ValParcela = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'valor_parcela'));
             $contrato->ValAcumulado = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data,'valor_acumulado'));
+            $contrato->TpSubtipo = ActionsCommon::validaDataArray($data,'subtipo');
+            $contrato->SitProrrogavel = ActionsCommon::validaDataArray($data,'prorrogavel');
+            $contrato->TxtJustificativaInativo = ActionsCommon::validaDataArray($data,'justificativa_inativo');
+            $contrato->TxtAmparoLegal = ActionsCommon::validaDataArray($data,'amparo_legal');
+            $contrato->TxtFundamentoLegal = ActionsCommon::validaDataArray($data,'fundamento_legal');
+            $contrato->TxtSisOriLicitacao = ActionsCommon::validaDataArray($data,'sistema_origem_licitacao');
+            $contrato->CodUnidadeCompra = ActionsCommon::validaDataArray($data,'unidade_compra');
 
             $contrato->save();
 
