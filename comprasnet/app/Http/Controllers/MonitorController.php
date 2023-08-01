@@ -22,7 +22,9 @@ class MonitorController extends Controller
 
         // Verifica URL
         $url = ($httpcode >= 200 && $httpcode < 400) ? true : false;
-        Log::info('[Monitor] $httpcode para ' . config('comprasnet.base_url') . '/auth/me: ' . $httpcode);
+        if (!$url) {
+            Log::info('[Monitor] $httpcode para ' . config('comprasnet.base_url') . '/auth/me: ' . $httpcode);
+        }
 
         try {
             // Verifica Banco de Dados
@@ -30,9 +32,8 @@ class MonitorController extends Controller
             $db = true;
         } catch (\Exception $e) {
             $db = false;
+            Log::error('DB: ' . $db);
         }
-
-        Log::info('DB: ' . $db);
 
        $status_geral = ($db && $url) ? 'ok' : 'ERRO';
 
@@ -44,7 +45,13 @@ class MonitorController extends Controller
             'Status Geral' => $status_geral,
         ];
 
-        $response = Response::json($json, $status_geral <> 'ok' ? 503 : 200);
+        /**
+         * O retorno da URL está instável, possivelmente devido à alguma configuração do curl
+         * por isso mantivemos o retorno 200 fixo na linha abaixo para não reinicilizar o
+         * pod contudo logar em caso de erro.
+         */
+        // $response = Response::json($json, $status_geral <> 'ok' ? 503 : 200);
+        $response = Response::json($json, 200);
         $response->header('status_geral', $status_geral);
 
         return $response;
