@@ -22,9 +22,9 @@ class MonitorController extends Controller
 
         // Verifica URL
         $url = ($httpcode >= 200 && $httpcode < 400) ? true : false;
-        if (!$url) {
-            Log::info('[Monitor] $httpcode para ' . config('comprasnet.base_url') . '/auth/me: ' . $httpcode);
-        }
+        // if (!$url) {
+        //     Log::info('[Monitor] $httpcode para ' . config('comprasnet.base_url') . '/auth/me: ' . $httpcode);
+        // }
 
         try {
             // Verifica Banco de Dados
