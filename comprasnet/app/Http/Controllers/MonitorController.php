@@ -3,6 +3,7 @@
 namespace Comprasnet\App\Http\Controllers;
 
 use Comprasnet\App\Models\Contrato;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
@@ -10,7 +11,7 @@ class MonitorController extends Controller
 {
     public function status()
     {
-        // Verifica Brasil Cidadão
+        // Verifica URL
         $ch = curl_init(config('comprasnet.base_url') . '/auth/me');
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -21,6 +22,7 @@ class MonitorController extends Controller
 
         // Verifica URL
         $url = ($httpcode >= 200 && $httpcode < 400) ? true : false;
+        Log::info('[Monitor] $httpcode para ' . config('comprasnet.base_url') . '/auth/me: ' . $httpcode);
 
         try {
             // Verifica Banco de Dados
@@ -29,6 +31,8 @@ class MonitorController extends Controller
         } catch (\Exception $e) {
             $db = false;
         }
+
+        Log::info('DB: ' . $db);
 
        $status_geral = ($db && $url) ? 'ok' : 'ERRO';
 
