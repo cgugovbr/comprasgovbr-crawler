@@ -35,7 +35,7 @@ class CreateContratoItemTable extends Migration
             $table->varChar('GrpId')->nullable();
             $table->string('CatMatSerItemId', 'max')->nullable();
             $table->string('DescComplementar', 'max')->nullable();
-            $table->integer('QtdItem')->nullable();
+            $table->decimal('QtdItem', 17, 2)->nullable();
             $table->decimal('ValUnitario', 17, 2)->nullable();
             $table->decimal('ValTotal', 17, 2)->nullable();
             $table->varChar('NumItemCompra')->nullable();
