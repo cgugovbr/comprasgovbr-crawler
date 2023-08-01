@@ -4,6 +4,7 @@ namespace Comprasnet\App\Console;
 
 use Comprasnet\App\Models\Arquivo;
 use Comprasnet\App\Models\Preposto;
+use Illuminate\Support\Facades\Log;
 use Comprasnet\App\Models\Cronograma;
 use Comprasnet\App\Models\Responsavel;
 use Comprasnet\App\Actions\ExcluirFatura;
@@ -41,72 +42,78 @@ class ComprasnetCommand extends HttpCommand
 
             foreach ($response as $data) {
 
-                $contrato_id = $data['id'];
+                try {
+                    $contrato_id = $data['id'];
 
-                if (isset($importarArray['importarAposContratoId']) && $contrato_id <= $importarArray['importarAposContratoId']) {
-                    $this->info('Não importar contrato: ' . $contrato_id);
-                    continue;
+                    if (isset($importarArray['importarAposContratoId']) && $contrato_id <= $importarArray['importarAposContratoId']) {
+                        $this->info('Não importar contrato: ' . $contrato_id);
+                        continue;
+                    }
+
+                    $this->line('');
+                    $this->line('----------------------------------------------------------------------');
+                    $this->info('Importando Contrato ' . $contrato_id);
+
+                    AdicionarContrato::addContrato($data, $this);
+
+                    $this->line('');
+                    $this->info('Importando itens do Contrato ' . $contrato_id);
+                    $this->getContratoItens($contrato_id);
+
+                    if (isset($importarArray['importarEmpenho']) && $importarArray['importarEmpenho'] == true) {
+                        $this->info('');
+                        $this->info('Importando Empenhos do contrato ' . $contrato_id);
+                        $this->getEmpenhosContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarCronograma']) && $importarArray['importarCronograma'] == true) {
+                        $this->info('');
+                        $this->info('Importando Cronograma do contrato ' . $contrato_id);
+                        $this->getCronogramasContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarHistorico']) && $importarArray['importarHistorico'] == true) {
+                        $this->info('');
+                        $this->info('Importando Histórico do contrato ' . $contrato_id);
+                        $this->getHistoricosContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarPreposto']) && $importarArray['importarPreposto'] == true) {
+                        $this->info('');
+                        $this->info('Importando Prepostos do contrato ' . $contrato_id);
+                        $this->getPrepostosContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarFatura']) && $importarArray['importarFatura'] == true) {
+                        $this->info('');
+                        $this->info('Importando Faturas do contrato ' . $contrato_id);
+                        $this->getFaturasContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarResponsavel']) && $importarArray['importarResponsavel'] == true) {
+                        $this->info('');
+                        $this->info('Importando Responsaveis do contrato ' . $contrato_id);
+                        $this->getResponsaveisContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarArquivo']) && $importarArray['importarArquivo'] == true) {
+                        $this->info('');
+                        $this->info('Importando Arquivos do contrato ' . $contrato_id);
+                        $this->getArquivosContrato($contrato_id);
+                    }
+
+                    if (isset($importarArray['importarPublicacao']) && $importarArray['importarPublicacao'] == true) {
+                        $this->info('');
+                        $this->info('Importando Publicações do contrato ' . $contrato_id);
+                        $this->getPublicacoesContrato($contrato_id);
+                    }
+
+                    $this->line('[Fim Contrato: ' . $contrato_id . ']--------------------------------------------------');
+
+                } catch (\Exception $e) {
+                    Log::error('[ERRO] Erro importando o contrato ' . $contrato_id);
+                    Log::error($e);
                 }
-
-                $this->line('');
-                $this->line('----------------------------------------------------------------------');
-                $this->info('Importando Contrato ' . $contrato_id);
-
-                AdicionarContrato::addContrato($data, $this);
-
-                $this->line('');
-                $this->info('Importando itens do Contrato ' . $contrato_id);
-                $this->getContratoItens($contrato_id);
-
-                if (isset($importarArray['importarEmpenho']) && $importarArray['importarEmpenho'] == true) {
-                    $this->info('');
-                    $this->info('Importando Empenhos do contrato ' . $contrato_id);
-                    $this->getEmpenhosContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarCronograma']) && $importarArray['importarCronograma'] == true) {
-                    $this->info('');
-                    $this->info('Importando Cronograma do contrato ' . $contrato_id);
-                    $this->getCronogramasContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarHistorico']) && $importarArray['importarHistorico'] == true) {
-                    $this->info('');
-                    $this->info('Importando Histórico do contrato ' . $contrato_id);
-                    $this->getHistoricosContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarPreposto']) && $importarArray['importarPreposto'] == true) {
-                    $this->info('');
-                    $this->info('Importando Prepostos do contrato ' . $contrato_id);
-                    $this->getPrepostosContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarFatura']) && $importarArray['importarFatura'] == true) {
-                    $this->info('');
-                    $this->info('Importando Faturas do contrato ' . $contrato_id);
-                    $this->getFaturasContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarResponsavel']) && $importarArray['importarResponsavel'] == true) {
-                    $this->info('');
-                    $this->info('Importando Responsaveis do contrato ' . $contrato_id);
-                    $this->getResponsaveisContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarArquivo']) && $importarArray['importarArquivo'] == true) {
-                    $this->info('');
-                    $this->info('Importando Arquivos do contrato ' . $contrato_id);
-                    $this->getArquivosContrato($contrato_id);
-                }
-
-                if (isset($importarArray['importarPublicacao']) && $importarArray['importarPublicacao'] == true) {
-                    $this->info('');
-                    $this->info('Importando Publicações do contrato ' . $contrato_id);
-                    $this->getPublicacoesContrato($contrato_id);
-                }
-
-                $this->line('[Fim Contrato: ' . $contrato_id . ']--------------------------------------------------');
             }
         }
     }

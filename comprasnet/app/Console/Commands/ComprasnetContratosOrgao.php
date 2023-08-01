@@ -144,7 +144,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 }
             }
         } catch (\Exception $e) {
-            Log::error('[ERRO] executando o comando comprasnet:contratos');
+            Log::error('[ERRO] executando o comando comprasnet:contratos:orgao');
             Log::error($e);
 
             Mail::send(new ErroImportacao());
