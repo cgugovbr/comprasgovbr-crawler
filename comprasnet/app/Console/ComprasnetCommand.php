@@ -43,6 +43,11 @@ class ComprasnetCommand extends HttpCommand
 
                 $contrato_id = $data['id'];
 
+                if (isset($importarArray['importarAposContratoId']) && $contrato_id <= $importarArray['importarAposContratoId']) {
+                    $this->info('Não importar contrato: ' . $contrato_id);
+                    continue;
+                }
+
                 $this->line('');
                 $this->line('----------------------------------------------------------------------');
                 $this->info('Importando Contrato ' . $contrato_id);

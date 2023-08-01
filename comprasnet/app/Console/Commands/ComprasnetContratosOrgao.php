@@ -29,6 +29,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                             {--email : Enviar email com relatório da execução}
                             {--email_to= : Email a ser enviado}
                             {--inativos : Importar os Contratos Inativos}
+                            {--depois= : Importar os Contratos depois do ID indicado}
                             ';
 
     /**
@@ -86,6 +87,8 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             $enviarEmail = $this->option('email');
             $enviarEmailTo = $this->option('email_to');
 
+            $importarAposContratoId = $this->option('depois');
+
             $this->line('');
             $this->line('----------------------------------------------------------------------');
             $this->line('Buscando todos os Contratos');
@@ -101,6 +104,9 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
             $this->line('Arquivo: ' . ($importarArquivo ? 'sim' : 'não'));
             $this->line('Publicação: ' . ($importarPublicacao ? 'sim' : 'não'));
             $this->line('Inativos: ' . ($importarInativos ? 'sim' : 'não'));
+            if ($importarAposContratoId) {
+                $this->line('Depois do contrato ID: ' . $importarAposContratoId);
+            }
             $this->line('----------------------------------------------------------------------');
             $this->line('');
             $this->line('Isso pode demorar alguns minutos dependento da quantidade de dados');
@@ -116,6 +122,7 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 'importarResponsavel' => $importarResponsavel,
                 'importarArquivo' => $importarArquivo,
                 'importarPublicacao' => $importarPublicacao,
+                'importarAposContratoId' => $importarAposContratoId,
             ];
 
             $this->getContratos($url, $importarArray);

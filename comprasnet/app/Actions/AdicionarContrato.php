@@ -20,7 +20,6 @@ class AdicionarContrato extends ActionsCommon {
     public static function addContrato($data, $command = null) : void
     {
         try {
-
             $contrato = Contrato::firstOrNew(['IdContrato' => $data['id']]);
 
             $contrato->IdContrato = $data['id'];
