@@ -38,10 +38,14 @@ class AdicionarFaturaItem {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao adicionar vínculo da fatura itens - Fatura: ' . $fatura_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao adicionar vínculo da fatura itens - Fatura: ' . $fatura_id;
+            ActionsCommon::errorHandler(
+                'adicionar_fatura_item',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

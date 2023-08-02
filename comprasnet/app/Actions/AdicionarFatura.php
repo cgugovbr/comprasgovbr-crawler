@@ -71,10 +71,14 @@ class AdicionarFatura {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar fatura - Número: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar fatura - Número: ' . $data['numero'] . ' | IdFaturaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_fatura',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 

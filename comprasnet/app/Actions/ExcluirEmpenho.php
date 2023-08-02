@@ -32,10 +32,13 @@ class ExcluirEmpenho {
             Empenho::where('IdContrato', '=', $contrato_id)->delete();
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao excluir empenho para o contrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao excluir empenho para o contrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_',
+                __METHOD__,
+                $message,
+                $e
+            );
         }
     }
 }

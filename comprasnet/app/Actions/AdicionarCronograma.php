@@ -46,10 +46,14 @@ class AdicionarCronograma {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar cronograma - Número: ' . $data['numero'] . ' | IdCronogramaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar cronograma - Número: ' . $data['numero'] . ' | IdCronogramaOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_cronograma',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

@@ -31,7 +31,7 @@ class CreateLogAtividadeTable extends Migration
             $table->varChar('TipAtividade'); // Importação / Conexão / e-Mail
             $table->varChar('SitAtividade'); // 'success' / 'error' / 'warning'
             $table->dateTime('DatLogAtividade');
-            $table->varChar('DetExecucao')->nullable();
+            $table->string('DetExecucao', 'max')->nullable();
         });
     }
 

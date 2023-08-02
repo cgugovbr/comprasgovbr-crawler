@@ -3,6 +3,9 @@
 namespace Comprasnet\App\Actions;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Comprasnet\App\Mail\ErroImportacao;
 
 class ActionsCommon {
 
@@ -23,5 +26,43 @@ class ActionsCommon {
         }
 
         return null;
+    }
+
+    /**
+     * Função para padronizar as saídas de erro da aplicação
+     *
+     * @param $tipo_erro
+     * @param $origem_erro
+     * @param $mensagem
+     * @param $exception
+     * @param $command
+     *
+     * @return void
+     */
+    public static function errorHandler($tipo_erro, $origem_erro, $mensagem = null, $exception = null, $command = null)
+    {
+        try {
+            $local_message = $mensagem ? '[ERRO] ' . $mensagem : '[ERRO] Erro no método "' . $origem_erro . '"';
+
+            Log::error($local_message);
+            if ($exception) {
+                Log::error($exception);
+            }
+            if ($command) {
+                $command->error($local_message);
+            }
+            LogarAtividade::handle(
+                $origem_erro,
+                $tipo_erro,
+                'error',
+                '{' .
+                'message: ' . $local_message . ', ' .
+                'exception: ' . ($exception ?? 'N/A') .
+                '}'
+            );
+            Mail::send(new ErroImportacao($local_message));
+        } catch (\Exception $e) {
+
+        }
     }
 }

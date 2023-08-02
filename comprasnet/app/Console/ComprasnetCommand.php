@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Comprasnet\App\Models\Cronograma;
 use Comprasnet\App\Models\Responsavel;
 use Comprasnet\App\Actions\ExcluirFatura;
+use Comprasnet\App\Actions\ActionsCommon;
 use Comprasnet\App\Actions\ExcluirEmpenho;
+use Comprasnet\App\Actions\LogarAtividade;
 use Comprasnet\App\Actions\AdicionarFatura;
 use Comprasnet\App\Actions\AdicionarArquivo;
 use Comprasnet\App\Actions\AdicionarEmpenho;
@@ -111,8 +113,14 @@ class ComprasnetCommand extends HttpCommand
                     $this->line('[Fim Contrato: ' . $contrato_id . ']--------------------------------------------------');
 
                 } catch (\Exception $e) {
-                    Log::error('[ERRO] Erro importando o contrato ' . $contrato_id);
-                    Log::error($e);
+                    $message = 'Erro importando o contrato ' . $contrato_id;
+                    ActionsCommon::errorHandler(
+                        'buscar_contratos',
+                        __METHOD__,
+                        $message,
+                        $e,
+                        $this
+                    );
                 }
             }
         }

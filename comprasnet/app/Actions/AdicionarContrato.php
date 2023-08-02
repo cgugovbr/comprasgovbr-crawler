@@ -20,9 +20,12 @@ class AdicionarContrato extends ActionsCommon {
     public static function addContrato($data, $command = null) : void
     {
         try {
-            $contrato = Contrato::firstOrNew(['IdContrato' => $data['id']]);
 
-            $contrato->IdContrato = $data['id'];
+            $contrato_id = $data['id'];
+
+            $contrato = Contrato::firstOrNew(['IdContrato' => $contrato_id]);
+
+            $contrato->IdContrato = $contrato_id;
             $contrato->TxtReceitaDespesa = (isset($data['receita_despesa']) && $data['receita_despesa'] <> '') ? $data['receita_despesa'] : null;
             $contrato->NumContrato = (isset($data['numero' ]) && $data['numero'] <> '') ? $data['numero'] : null;
 
@@ -68,16 +71,18 @@ class AdicionarContrato extends ActionsCommon {
             $contrato->save();
 
             if ($command) {
-                $command->info('Contrato com id ' . $data['id'] . ' inserido/atualizado com sucesso!');
+                $command->info('Contrato com id ' . $contrato_id . ' inserido/atualizado com sucesso!');
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar contrasto - IdContrato' . $data['id'];
-            Log::error($message);
-            Log::error($e);
-            LogarAtividade::handle(__METHOD__, 'importar', 'error', $message);
-            LogarAtividade::handle(__METHOD__, 'importar', 'error', $e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar contrasto - IdContrato' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_contrato',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

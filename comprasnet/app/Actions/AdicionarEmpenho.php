@@ -56,10 +56,14 @@ class AdicionarEmpenho extends ActionsCommon {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar empenho - Número: ' . $data['numero'] . ' | IdEmpenhoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar empenho - Número: ' . $data['numero'] . ' | IdEmpenhoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_empenho',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

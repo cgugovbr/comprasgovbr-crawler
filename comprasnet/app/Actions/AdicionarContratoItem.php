@@ -45,13 +45,14 @@ class AdicionarContratoItem {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao adicionar itens do contrato: ' . $contrato_id;
-            if ($command) {
-                $command->error($message);
-            }
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao adicionar itens do contrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_contrato_item',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

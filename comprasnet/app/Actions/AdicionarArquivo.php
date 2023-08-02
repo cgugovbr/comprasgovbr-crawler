@@ -44,10 +44,14 @@ class AdicionarArquivo {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar arquivo - Descrição: ' . $data['descricao'] . ' | IdArquivoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar arquivo - Descrição: ' . $data['descricao'] . ' | IdArquivoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_arquivo',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

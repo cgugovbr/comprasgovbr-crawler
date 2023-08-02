@@ -37,10 +37,14 @@ class AdicionarFaturaMesAno {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao adicionar vínculo da fatura mês e ano - Fatura: ' . $fatura_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao adicionar vínculo da fatura mês e ano - Fatura: ' . $fatura_id;
+            ActionsCommon::errorHandler(
+                'adicionar_fatura_mes_ano',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

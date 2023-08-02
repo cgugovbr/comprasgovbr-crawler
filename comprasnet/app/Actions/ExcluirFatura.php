@@ -27,10 +27,13 @@ class ExcluirFatura {
             Fatura::whereIn('IdFatura', $faturas_id)->delete();
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao excluir fatura para o contrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao excluir fatura para o contrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_',
+                __METHOD__,
+                $message,
+                $e
+            );
         }
     }
 }

@@ -46,10 +46,14 @@ class AdicionarPreposto {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar preposto - Nome: ' . $data['usuario'] . ' | IdPrepostoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar preposto - Nome: ' . $data['usuario'] . ' | IdPrepostoOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_preposto',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }

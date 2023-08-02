@@ -44,10 +44,14 @@ class AdicionarResponsavel {
             }
 
         } catch (\Exception $e) {
-            $message = '[ERRO] Erro ao criar/atualizar responsável - Nome: ' . $data['usuario'] . ' | IdResponsavelOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
-            Log::error($message);
-            Log::error($e);
-            Mail::send(new ErroImportacao($message));
+            $message = 'Erro ao criar/atualizar responsável - Nome: ' . $data['usuario'] . ' | IdResponsavelOriginal: ' . $data['id'] . ' | IdContrato: ' . $contrato_id;
+            ActionsCommon::errorHandler(
+                'adicionar_responsavel',
+                __METHOD__,
+                $message,
+                $e,
+                $command
+            );
         }
     }
 }
