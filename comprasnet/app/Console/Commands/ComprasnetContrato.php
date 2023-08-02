@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
 use Comprasnet\App\Mail\DadosImportados;
+use Comprasnet\App\Actions\LogarAtividade;
 use Comprasnet\App\Console\ComprasnetCommand;
 
 class ComprasnetContrato extends ComprasnetCommand
@@ -100,6 +101,8 @@ class ComprasnetContrato extends ComprasnetCommand
             ];
 
             $this->getContratos($url, $importarArray);
+
+            LogarAtividade::handle(__METHOD__, 'importar');
 
             if ($enviarEmail) {
                 if ($enviarEmailTo) {

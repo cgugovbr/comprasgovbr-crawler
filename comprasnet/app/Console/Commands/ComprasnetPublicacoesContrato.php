@@ -5,6 +5,7 @@ namespace Comprasnet\App\Console\Commands;
 use Comprasnet\App\Models\Contrato;
 use Illuminate\Support\Facades\Mail;
 use App\Console\Commands\DadosImportados;
+use Comprasnet\App\Actions\LogarAtividade;
 use Comprasnet\App\Console\ComprasnetCommand;
 
 class ComprasnetPublicacoesContrato extends ComprasnetCommand
@@ -66,6 +67,8 @@ class ComprasnetPublicacoesContrato extends ComprasnetCommand
                 $this->line('Importando publicações do contrato ' . $contrato_id);
                 $this->getPublicacoesContrato($contrato_id);
                 $this->line('----------------------------------------------------------------------');
+
+                LogarAtividade::handle(__METHOD__, 'importar');
 
                 if ($enviarEmail) {
                     if ($enviarEmailTo) {

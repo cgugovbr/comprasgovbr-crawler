@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
 use Comprasnet\App\Mail\DadosImportados;
+use Comprasnet\App\Actions\LogarAtividade;
 use Comprasnet\App\Console\ComprasnetCommand;
 
 class ComprasnetContratosOrgao extends ComprasnetCommand
@@ -136,6 +137,8 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 $this->getContratos($url, $importarArray);
             }
 
+            LogarAtividade::handle(__METHOD__, 'importar');
+
             if ($enviarEmail) {
                 if ($enviarEmailTo) {
                     Mail::to($enviarEmailTo)->send(new DadosImportados);
@@ -144,8 +147,11 @@ class ComprasnetContratosOrgao extends ComprasnetCommand
                 }
             }
         } catch (\Exception $e) {
+
             Log::error('[ERRO] executando o comando comprasnet:contratos:orgao');
             Log::error($e);
+
+            LogarAtividade::handle(__METHOD__, 'importar', 'error', $e);
 
             Mail::send(new ErroImportacao());
 

@@ -75,6 +75,8 @@ class AdicionarContrato extends ActionsCommon {
             $message = '[ERRO] Erro ao criar/atualizar contrasto - IdContrato' . $data['id'];
             Log::error($message);
             Log::error($e);
+            LogarAtividade::handle(__METHOD__, 'importar', 'error', $message);
+            LogarAtividade::handle(__METHOD__, 'importar', 'error', $e);
             Mail::send(new ErroImportacao($message));
         }
     }

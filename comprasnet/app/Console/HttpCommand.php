@@ -6,8 +6,12 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Comprasnet\App\Mail\ErroImportacao;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Comprasnet\App\Actions\LogarAtividade;
 use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 // use GuzzleHttp\Exception\RequestException;
@@ -164,12 +168,15 @@ class HttpCommand extends Command
         }
 
         if (! $this->accessTokenIsValid()) {
-            /**
-             * @TODO
-             * - enviar email ao adm
-             * - parar todas as execuções
-             */
-            dd('erro em updateAccessToken...');
+            $message = '[ERRO] Erro em updateAccessToken';
+            Mail::send(new ErroImportacao($message));
+            Log::error($message);
+            LogarAtividade::handle(
+                __METHOD__,
+                'connection',
+                'error',
+                $message
+            );
             die();
         }
     }
@@ -274,7 +281,7 @@ class HttpCommand extends Command
             'headers' => [
                 'Authorization' => "Bearer " . $this->access_token
             ],
-           'timeout' => $this->timeout ?? 2
+            'timeout' => $this->timeout ?? 2
         ]);
     }
 }
