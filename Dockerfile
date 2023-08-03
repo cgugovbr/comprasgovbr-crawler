@@ -83,6 +83,7 @@ COPY . /var/www/html
 COPY ./docker/production/start-container /usr/local/bin/start-container
 COPY ./docker/production/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./docker/production/php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
+COPY ./docker/symfony-mailer-cgu/EsmtpTransport.php /var/www/html/vendor/symfony/mailer/Transport/Smtp/EsmtpTransport.php
 RUN chmod +x /usr/local/bin/start-container
 
 # Cria composer autoloader
