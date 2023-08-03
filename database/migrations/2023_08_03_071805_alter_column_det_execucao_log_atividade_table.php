@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use App\Schemas\Blueprints\CustomBlueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLogAtividadeTable extends Migration
+class AlterColumnDetExecucaoLogAtividadeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -23,15 +23,8 @@ class CreateLogAtividadeTable extends Migration
             return new CustomBlueprint($table, $callback);
         });
 
-        $schema->create('LogAtividade', function (Blueprint $table) {
-
-            // Chave Primária
-            $table->bigIncrements('IdLogAtividade');
-            $table->varChar('OriExecucao');
-            $table->varChar('TipAtividade'); // Importação / Conexão / e-Mail
-            $table->varChar('SitAtividade'); // 'success' / 'error' / 'warning'
-            $table->dateTime('DatLogAtividade');
-            $table->varChar('DetExecucao')->nullable();
+        $schema->table('LogAtividade', function (Blueprint $table) {
+            $table->string('DetExecucao', 'max')->nullable()->change();
         });
     }
 
@@ -42,6 +35,6 @@ class CreateLogAtividadeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('LogarAtividade');
+        //
     }
 }
