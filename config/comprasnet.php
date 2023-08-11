@@ -14,6 +14,7 @@ return [
     // Necessário manter a barra ao final quando for uma busca por órgão ou ug '/contrato/orgao/'
     'contratos' => [
         'full' => '/contrato',
+        'contrato' => '/contrato',
         'orgao' => '/contrato/orgao/',
         'ug' => '/contrato/ug/',
         'inativo_orgao' => '/contrato/inativo/orgao/',

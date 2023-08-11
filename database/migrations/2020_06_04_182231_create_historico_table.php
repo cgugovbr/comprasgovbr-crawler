@@ -26,9 +26,9 @@ class CreateHistoricoTable extends Migration
         $schema->create('Historico', function (Blueprint $table) {
 
             // Chave Primária
-            $table->increments('IdHistorico')->generatedAs('1,1');
+            $table->bigIncrements('IdHistorico')->generatedAs('1,1');
 
-            $table->integer('IdContrato')->unsigned()->nullable();
+            $table->bigInteger('IdContrato')->unsigned()->nullable();
 
             $table->varChar('TxtReceitaDespesa')->nullable();
             $table->varChar('NumContrato')->nullable();

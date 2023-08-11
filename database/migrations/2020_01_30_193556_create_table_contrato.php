@@ -24,7 +24,7 @@ class CreateTableContrato extends Migration
         });
 
         $schema->create('Contrato', function (Blueprint $table) {
-            $table->integer('IdContrato');
+            $table->bigInteger('IdContrato');
             $table->varChar('TxtReceitaDespesa')->nullable();
             $table->varChar('NumContrato')->nullable();
 
