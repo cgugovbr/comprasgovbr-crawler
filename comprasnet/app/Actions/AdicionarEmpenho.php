@@ -42,12 +42,12 @@ class AdicionarEmpenho extends ActionsCommon {
             $empenho->ValRPLiquidado = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rpliquidado'));
             $empenho->ValRPPago = str_replace(['.', ','], ['', '.'], ActionsCommon::validaDataArray($data, 'rppago'));
 
-            $empenho->CodUnidadeGestora = ActionsCommon::validaDataArray($data, 'unidade_gestora');;
-            $empenho->NumGestao = ActionsCommon::validaDataArray($data, 'gestao');;
-            $empenho->DatEmissao = ActionsCommon::validaDataArray($data, 'data_emissao');;
-            $empenho->TxtInformacaoComplementar = ActionsCommon::validaDataArray($data, 'informacao_complementar');;
-            $empenho->TxtSisOrigem = ActionsCommon::validaDataArray($data, 'sistema_origem');;
-            $empenho->TxtFonteRecurso = ActionsCommon::validaDataArray($data, 'fonte_recurso');;
+            $empenho->CodUnidadeGestora = ActionsCommon::validaDataArray($data, 'unidade_gestora');
+            $empenho->NumGestao = ActionsCommon::validaDataArray($data, 'gestao');
+            $empenho->DatEmissao = ActionsCommon::validaDataArray($data, 'data_emissao');
+            $empenho->TxtInformacaoComplementar = ActionsCommon::validaDataArray($data, 'informacao_complementar');
+            $empenho->TxtSisOrigem = ActionsCommon::validaDataArray($data, 'sistema_origem');
+            $empenho->TxtFonteRecurso = ActionsCommon::validaDataArray($data, 'fonte_recurso');
 
             $empenho->save();
 
