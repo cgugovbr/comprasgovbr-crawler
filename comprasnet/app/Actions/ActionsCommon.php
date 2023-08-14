@@ -2,6 +2,7 @@
 
 namespace Comprasnet\App\Actions;
 
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -10,7 +11,55 @@ use Comprasnet\App\Mail\ErroImportacao;
 class ActionsCommon {
 
     /**
-     * Helper para extrai dados de um array
+     * Corrige retorno da data para limitar ano a '9999'
+     *
+     * @param string      $data
+     * @param string|null $format
+     *
+     * @return string
+     */
+    public static function corrigeDataSqlServer(string $data, string $format = null): string
+    {
+        try {
+            $format = $format ?? 'Y-m-d';
+            $data_retorno = Carbon::createFromFormat($format, $data)->format('Y-m-d');
+        } catch (\Exception $e) {
+            try {
+                $data_retorno = Carbon::createFromFormat('d-m-Y', $data)->format('Y-m-d');
+                } catch (\Exception $e) {
+                    try {
+                        $datetime = mktime(
+                            0,
+                            0,
+                            0,
+                            substr($data, -5, 2),
+                            substr($data, -2),
+                            substr($data, 0, strlen($data)-6)
+                        );
+
+                        if (substr($data, 0, strlen($data)-6) > 9999) {
+                            $data_retorno = date('Y-m-d', mktime(
+                                0,
+                                0,
+                                0,
+                                substr($data, -5, 2),
+                                substr($data, -2),
+                                9999
+                            ));
+                        } else {
+                            $data_retorno = date('Y-m-d', $datetime);
+                        }
+                    } catch (\Exception $e) {
+                        $data_retorno = null;
+                    }
+                }
+        }
+
+        return $data_retorno;
+    }
+
+    /**
+     * Helper para extrair dados de um array
      *
      * @param $array
      * @param ...$keys
