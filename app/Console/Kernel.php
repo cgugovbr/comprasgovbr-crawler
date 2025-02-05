@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 use Comprasnet\App\Mail\ErroImportacao;
 use Comprasnet\App\Mail\DadosImportados;
@@ -48,22 +49,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $current_date = Carbon::now()->toDateString();
-        $file_path = './storage/logs/' . $current_date . '-compranet_crawler.log';
+        if (strtolower(App::environment()) == 'production') {
+            $current_date = Carbon::now()->toDateString();
+            $file_path = './storage/logs/' . $current_date . '-compranet_crawler.log';
 
-        $data = [
-            'file_path' => $file_path
-        ];
+            $data = [
+                'file_path' => $file_path
+            ];
 
-        $schedule->command('comprasnet:contratos:orgao --all --inativos')
-            ->cron('0 1 * * *')
-            ->sendOutputTo($file_path)
-//            ->onSuccess(function () use ($data) {
-//                Mail::send(new DadosImportados($data));
-//            })
-            ->onFailure(function () use ($data) {
-                Mail::send(new ErroImportacao($data));
-            });
+            $schedule->command('comprasnet:contratos:orgao --all --inativos')
+                ->cron('0 1 * * *')
+                ->sendOutputTo($file_path)
+    //            ->onSuccess(function () use ($data) {
+    //                Mail::send(new DadosImportados($data));
+    //            })
+                ->onFailure(function () use ($data) {
+                    Mail::send(new ErroImportacao($data));
+                });
+        }
     }
 
     /**
